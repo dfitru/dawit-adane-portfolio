@@ -71,6 +71,11 @@
             border-radius: 10px;
             font-size: 0.9rem;
             font-weight: 500;
+            cursor: pointer; /* Indicate clickable */
+            transition: background-color 0.2s ease-in-out;
+        }
+        .skill-tag:hover {
+            background-color: #cce7ff; /* Slightly darker light blue on hover */
         }
         .footer {
             background-color: #1a202c;
@@ -87,6 +92,9 @@
         }
         .contact-link:hover {
             color: #90cdf4;
+        }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -117,49 +125,57 @@
         <section class="mb-8">
             <h2 class="text-3xl font-semibold section-title">Technical Skills</h2>
             <div class="card">
+                <p class="text-md text-gray-600 mb-4">Click on any skill below for a quick AI-powered explanation! ✨</p>
                 <div class="skill-category">Programming:</div>
                 <div class="skill-list">
-                    <span class="skill-tag">T-SQL</span>
-                    <span class="skill-tag">Python</span>
-                    <span class="skill-tag">PowerShell</span>
+                    <span class="skill-tag" data-skill="T-SQL">T-SQL</span>
+                    <span class="skill-tag" data-skill="Python">Python</span>
+                    <span class="skill-tag" data-skill="PowerShell">PowerShell</span>
                 </div>
 
                 <div class="skill-category mt-4">Databases:</div>
                 <div class="skill-list">
-                    <span class="skill-tag">Microsoft SQL Server</span>
-                    <span class="skill-tag">Snowflake</span>
-                    <span class="skill-tag">BigQuery</span>
-                    <span class="skill-tag">PostgreSQL</span>
-                    <span class="skill-tag">MySQL</span>
+                    <span class="skill-tag" data-skill="Microsoft SQL Server">Microsoft SQL Server</span>
+                    <span class="skill-tag" data-skill="Snowflake">Snowflake</span>
+                    <span class="skill-tag" data-skill="BigQuery">BigQuery</span>
+                    <span class="skill-tag" data-skill="PostgreSQL">PostgreSQL</span>
+                    <span class="skill-tag" data-skill="MySQL">MySQL</span>
                 </div>
 
                 <div class="skill-category mt-4">Tools/Frameworks:</div>
                 <div class="skill-list">
-                    <span class="skill-tag">SSIS</span>
-                    <span class="skill-tag">SSRS</span>
-                    <span class="skill-tag">Power BI</span>
-                    <span class="skill-tag">dbt Core</span>
-                    <span class="skill-tag">Fivetran</span>
-                    <span class="skill-tag">Azure Data Factory</span>
-                    <span class="skill-tag">Azure Synapse</span>
-                    <span class="skill-tag">Azure Functions</span>
+                    <span class="skill-tag" data-skill="SSIS">SSIS</span>
+                    <span class="skill-tag" data-skill="SSRS">SSRS</span>
+                    <span class="skill-tag" data-skill="Power BI">Power BI</span>
+                    <span class="skill-tag" data-skill="dbt Core">dbt Core</span>
+                    <span class="skill-tag" data-skill="Fivetran">Fivetran</span>
+                    <span class="skill-tag" data-skill="Azure Data Factory">Azure Data Factory</span>
+                    <span class="skill-tag" data-skill="Azure Synapse">Azure Synapse</span>
+                    <span class="skill-tag" data-skill="Azure Functions">Azure Functions</span>
                 </div>
 
                 <div class="skill-category mt-4">DevOps:</div>
                 <div class="skill-list">
-                    <span class="skill-tag">Git</span>
-                    <span class="skill-tag">Azure DevOps</span>
-                    <span class="skill-tag">GitHub Actions</span>
-                    <span class="skill-tag">CI/CD pipelines</span>
+                    <span class="skill-tag" data-skill="Git">Git</span>
+                    <span class="skill-tag" data-skill="Azure DevOps">Azure DevOps</span>
+                    <span class="skill-tag" data-skill="GitHub Actions">GitHub Actions</span>
+                    <span class="skill-tag" data-skill="CI/CD pipelines">CI/CD pipelines</span>
                 </div>
 
                 <div class="skill-category mt-4">Web Technologies:</div>
                 <div class="skill-list">
-                    <span class="skill-tag">HTML</span>
-                    <span class="skill-tag">CSS</span>
-                    <span class="skill-tag">APIs</span>
-                    <span class="skill-tag">MVC</span>
+                    <span class="skill-tag" data-skill="HTML">HTML</span>
+                    <span class="skill-tag" data-skill="CSS">CSS</span>
+                    <span class="skill-tag" data-skill="APIs">APIs</span>
+                    <span class="skill-tag" data-skill="MVC">MVC</span>
                 </div>
+
+                <!-- AI-Powered Skill Explanation Area -->
+                <div id="loading-indicator" class="mt-4 text-center text-gray-500 hidden">Loading explanation...</div>
+                <div id="skill-explanation-area" class="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200 hidden">
+                    <!-- Explanation will be inserted here -->
+                </div>
+                <button id="clear-explanation-btn" class="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition duration-200 hidden">Clear Explanation</button>
             </div>
         </section>
 
@@ -266,6 +282,73 @@
             <p>&copy; 2025 Dawit Adane. All rights reserved.</p>
         </div>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const skillTags = document.querySelectorAll('.skill-tag');
+            const skillExplanationArea = document.getElementById('skill-explanation-area');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const clearExplanationBtn = document.getElementById('clear-explanation-btn');
+
+            // Add event listeners to each skill tag
+            skillTags.forEach(tag => {
+                tag.addEventListener('click', async () => {
+                    const skillName = tag.dataset.skill; // Get the skill name from the data-skill attribute
+                    skillExplanationArea.innerHTML = ''; // Clear any previous explanation
+                    skillExplanationArea.classList.add('hidden'); // Hide the explanation area
+                    clearExplanationBtn.classList.add('hidden'); // Hide the clear button
+                    loadingIndicator.classList.remove('hidden'); // Show loading indicator
+
+                    // Construct the prompt for the Gemini API
+                    const prompt = `Explain what ${skillName} is in the context of data engineering, its main purpose, and a common use case. Keep it concise, around 2-3 sentences.`;
+
+                    // Prepare the payload for the Gemini API call
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""; // API key will be provided by the Canvas environment
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    try {
+                        // Make the fetch call to the Gemini API
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        const result = await response.json();
+
+                        // Check if the response contains valid content
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const text = result.candidates[0].content.parts[0].text;
+                            skillExplanationArea.innerHTML = `<p class="text-gray-800">${text}</p>`;
+                            skillExplanationArea.classList.remove('hidden'); // Show the explanation area
+                            clearExplanationBtn.classList.remove('hidden'); // Show the clear button
+                        } else {
+                            skillExplanationArea.innerHTML = `<p class="text-red-500">Could not retrieve an explanation for "${skillName}". Please try again.</p>`;
+                            skillExplanationArea.classList.remove('hidden'); // Show the explanation area
+                            clearExplanationBtn.classList.remove('hidden'); // Show the clear button
+                        }
+                    } catch (error) {
+                        console.error('Error calling Gemini API:', error);
+                        skillExplanationArea.innerHTML = `<p class="text-red-500">Error fetching explanation: ${error.message}. Please check your network connection.</p>`;
+                        skillExplanationArea.classList.remove('hidden'); // Show the explanation area
+                        clearExplanationBtn.classList.remove('hidden'); // Show the clear button
+                    } finally {
+                        loadingIndicator.classList.add('hidden'); // Hide loading indicator
+                    }
+                });
+            });
+
+            // Add event listener for the clear explanation button
+            clearExplanationBtn.addEventListener('click', () => {
+                skillExplanationArea.innerHTML = '';
+                skillExplanationArea.classList.add('hidden');
+                clearExplanationBtn.classList.add('hidden');
+            });
+        });
+    </script>
 </body>
 </html>
-
