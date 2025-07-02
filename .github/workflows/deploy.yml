@@ -18,7 +18,6 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18' # Specify Node.js version
-
     # If your project had a build step (e.g., for React, Vue, or if you were injecting env vars)
     # - name: Install dependencies
     #   run: npm install
