@@ -314,7 +314,7 @@
 
             // IMPORTANT: Replace with the actual URL of your deployed Netlify Function
             // This function will act as a secure proxy to call the Gemini API, keeping your API key secret.
-            const netlifyFunctionEndpoint = 'YOUR_NETLIFY_FUNCTION_URL_HERE'; 
+            const netlifyFunctionEndpoint = 'calm-mermaid-a476c4.netlify.app'; 
 
             // Add event listeners to each skill tag
             skillTags.forEach(tag => {
@@ -325,7 +325,7 @@
                     clearExplanationBtn.classList.add('hidden'); // Hide the clear button
                     loadingIndicator.classList.remove('hidden'); // Show loading indicator
 
-                    if (netlifyFunctionEndpoint === 'YOUR_NETLIFY_FUNCTION_URL_HERE') {
+                    if (netlifyFunctionEndpoint === 'calm-mermaid-a476c4.netlify.app') {
                         skillExplanationArea.innerHTML = `<p class="text-red-500">To enable AI explanations, please deploy a Netlify Function (or similar serverless backend) and update 'netlifyFunctionEndpoint' in this HTML file with its URL.</p>`;
                         skillExplanationArea.classList.remove('hidden');
                         clearExplanationBtn.classList.remove('hidden');
