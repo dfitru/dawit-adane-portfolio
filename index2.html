@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dawit Adane - Data Engineer Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+        }
+        .header {
+            background-color: #1a202c; /* Darker blue-gray */
+            color: #fff;
+            padding: 2rem 0;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .section-title {
+            color: #2c5282; /* A shade of blue */
+            border-bottom: 2px solid #2c5282;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .experience-item {
+            border-left: 4px solid #4299e1; /* Blue border */
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+        .experience-title {
+            font-weight: 600;
+            color: #2c5282;
+        }
+        .experience-company {
+            font-style: italic;
+            color: #4a5568;
+        }
+        .skill-category {
+            font-weight: 600;
+            color: #2c5282;
+            margin-top: 1rem;
+        }
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+        .skill-tag {
+            background-color: #ebf8ff; /* Light blue */
+            color: #2c5282;
+            padding: 0.4rem 0.8rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer; /* Indicate clickable */
+            transition: background-color 0.2s ease-in-out;
+        }
+        .skill-tag:hover {
+            background-color: #cce7ff; /* Slightly darker light blue on hover */
+        }
+        .footer {
+            background-color: #1a202c;
+            color: #fff;
+            padding: 1.5rem 0;
+            margin-top: 2rem;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .contact-link {
+            color: #63b3ed; /* Lighter blue for links */
+            text-decoration: none;
+            transition: color 0.2s ease-in-out;
+        }
+        .contact-link:hover {
+            color: #90cdf4;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="header text-center">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold mb-2">Dawit Adane</h1>
+            <p class="text-xl font-light">Data Engineer</p>
+            <div class="mt-4 text-lg">
+                <p>adanedawitt@gmail.com | 317-902-7364 | <a href="https://linkedin.com/in/dawit1221/" target="_blank" class="contact-link">linkedin.com/in/dawit1221/</a></p>
+                <p>Heath, TX</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Summary Section -->
+        <section class="mb-8">
+            <h2 class="text-3xl font-semibold section-title">Summary</h2>
+            <div class="card">
+                <p class="text-lg leading-relaxed">
+                    Data Engineer with 7+ years of experience architecting end-to-end data pipelines using Snowflake, Azure, and Microsoft SQL Server. Proficient in T-SQL, dbt Core, Fivetran, and CI/CD with GitHub Actions, I deliver scalable, cloud-native data solutions for real-time analytics. Skilled in automating data workflows and designing dynamic Power BI dashboards, I collaborate with cross-functional teams to drive data-driven decision-making.
+                </p>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="mb-8">
+            <h2 class="text-3xl font-semibold section-title">Services</h2>
+            <div class="card">
+                <p class="text-lg leading-relaxed mb-4">
+                    Leveraging my extensive experience in data engineering, I offer the following services to individuals and organizations:
+                </p>
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-2">Mentoring</h3>
+                    <p class="text-gray-700">
+                        Are you an aspiring data engineer or looking to enhance your skills? I provide personalized mentoring sessions to guide you through complex concepts, best practices, and career development in the data engineering field. Whether it's mastering ETL processes, understanding cloud data platforms, or optimizing data pipelines, I'm here to help you grow.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-blue-700 mb-2">Consulting</h3>
+                    <p class="text-gray-700">
+                        For businesses seeking to optimize their data infrastructure or implement robust data solutions, I offer consulting services. This includes designing end-to-end data pipelines, advising on cloud migrations (Azure, Snowflake), optimizing database performance, implementing CI/CD for data workflows, and developing effective data visualization strategies with Power BI. Let's build scalable and efficient data systems together.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Skills Section -->
+        <section class="mb-8">
+            <h2 class="text-3xl font-semibold section-title">Technical Skills</h2>
+            <div class="card">
+                <p class="text-md text-gray-600 mb-4">Click on any skill below for a quick AI-powered explanation! ✨</p>
+                <div class="skill-category">Programming:</div>
+                <div class="skill-list">
+                    <span class="skill-tag" data-skill="T-SQL">T-SQL</span>
+                    <span class="skill-tag" data-skill="Python">Python</span>
+                    <span class="skill-tag" data-skill="PowerShell">PowerShell</span>
+                </div>
+
+                <div class="skill-category mt-4">Databases:</div>
+                <div class="skill-list">
+                    <span class="skill-tag" data-skill="Microsoft SQL Server">Microsoft SQL Server</span>
+                    <span class="skill-tag" data-skill="Snowflake">Snowflake</span>
+                    <span class="skill-tag" data-skill="BigQuery">BigQuery</span>
+                    <span class="skill-tag" data-skill="PostgreSQL">PostgreSQL</span>
+                    <span class="skill-tag" data-skill="MySQL">MySQL</span>
+                </div>
+
+                <div class="skill-category mt-4">Tools/Frameworks:</div>
+                <div class="skill-list">
+                    <span class="skill-tag" data-skill="SSIS">SSIS</span>
+                    <span class="skill-tag" data-skill="SSRS">SSRS</span>
+                    <span class="skill-tag" data-skill="Power BI">Power BI</span>
+                    <span class="skill-tag" data-skill="dbt Core">dbt Core</span>
+                    <span class="skill-tag" data-skill="Fivetran">Fivetran</span>
+                    <span class="skill-tag" data-skill="Azure Data Factory">Azure Data Factory</span>
+                    <span class="skill-tag" data-skill="Azure Synapse">Azure Synapse</span>
+                    <span class="skill-tag" data-skill="Azure Functions">Azure Functions</span>
+                </div>
+
+                <div class="skill-category mt-4">DevOps:</div>
+                <div class="skill-list">
+                    <span class="skill-tag" data-skill="Git">Git</span>
+                    <span class="skill-tag" data-skill="Azure DevOps">Azure DevOps</span>
+                    <span class="skill-tag" data-skill="GitHub Actions">GitHub Actions</span>
+                    <span class="skill-tag" data-skill="CI/CD pipelines">CI/CD pipelines</span>
+                </div>
+
+                <div class="skill-category mt-4">Web Technologies:</div>
+                <div class="skill-list">
+                    <span class="skill-tag" data-skill="HTML">HTML</span>
+                    <span class="skill-tag" data-skill="CSS">CSS</span>
+                    <span class="skill-tag" data-skill="APIs">APIs</span>
+                    <span class="skill-tag" data-skill="MVC">MVC</span>
+                </div>
+
+                <!-- AI-Powered Skill Explanation Area -->
+                <div id="loading-indicator" class="mt-4 text-center text-gray-500 hidden">Loading explanation...</div>
+                <div id="skill-explanation-area" class="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200 hidden">
+                    <!-- Explanation will be inserted here -->
+                </div>
+                <button id="clear-explanation-btn" class="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition duration-200 hidden">Clear Explanation</button>
+            </div>
+        </section>
+
+        <!-- Professional Experience Section -->
+        <section class="mb-8">
+            <h2 class="text-3xl font-semibold section-title">Professional Experience</h2>
+
+            <!-- Wex (Health Care) -->
+            <div class="card">
+                <div class="experience-item">
+                    <h3 class="text-xl experience-title">BI Software Developer\ Data Engineer</h3>
+                    <p class="experience-company">Wex (Health Care), Remote</p>
+                    <p class="text-sm text-gray-500 mb-2">May 2023 – Present</p>
+                    <ul class="list-disc pl-5 text-gray-700">
+                        <li>Architected end-to-end data pipelines, integrating BigQuery, flat files, and APIs into Snowflake via Azure Storage, processing 1TB+ of daily data with 99.9% uptime.</li>
+                        <li>Configured Fivetran syncs to ingest 500GB+ of BigQuery data into Snowflake, reducing latency by 20% for real-time analytics.</li>
+                        <li>Deployed dbt Core and Snowflake environments (dev, staging, prod), authoring 50+ data models to support analytics for 10+ business units.</li>
+                        <li>Implemented SFTP and Azure Functions to automate secure data transfers to Azure Storage, improving ingestion reliability by 25%.</li>
+                        <li>Built GitHub Actions workflows for CI/CD, automating dbt model deployments and daily Snowflake data refreshes, cutting deployment time by 40%.</li>
+                        <li>Collaborated with analytics team to design 10+ dynamic Power BI dashboards, visualizing KPIs for 100+ stakeholders and driving 15% faster decision-making.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- NetImpact\ASRC -->
+            <div class="card">
+                <div class="experience-item">
+                    <h3 class="text-xl experience-title">Data Developer\ Engineer</h3>
+                    <p class="experience-company">NetImpact\ASRC, Remote</p>
+                    <p class="text-sm text-gray-500 mb-2">Jan 2022 – May 2023</p>
+                    <ul class="list-disc pl-5 text-gray-700">
+                        <li>Using Azure data factory Created pipeline, build, and manage data, orchestrate large scale data movement with another Azure platform.</li>
+                        <li>Using Azure data factory Moved, transform and control Data movements based on success, failure, skipped pr completed conditions.</li>
+                        <li>Debug pipeline using debug toolbar, debug slider Notification.</li>
+                        <li>Ingested data between various data stores, data transformation, cleansing, and implementing slowly changing dimensions with Azure Data Factory and Azure Synapse pipelines.</li>
+                        <li>Implemented data quality checks within the ETL/ELT processes, setting up alerts for anomalies in data patterns, and developing tools for ongoing data quality monitoring and validation.</li>
+                        <li>Designed database schemas, created, and modified tables and views, and ensuring the integrity of data relationships using primary and foreign keys, constraints, and indexes.</li>
+                        <li>Crafting new and optimizing existing data structures within Snowflake.</li>
+                        <li>Using BI tools such as Tableau, PowerBI, or Looker to create dashboards that visualize key performance indicators and metrics and providing training to stakeholders on how to use these dashboards effectively.</li>
+                        <li>Integrating database development processes with CI/CD pipelines in Azure DevOps, ensuring seamless and automated deployment of database changes across different environments.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- American Structure -->
+            <div class="card">
+                <div class="experience-item">
+                    <h3 class="text-xl experience-title">Junior Data Developer/Administrator</h3>
+                    <p class="experience-company">American Structure, Indianapolis, IN</p>
+                    <p class="text-sm text-gray-500 mb-2">Jan 2019 – Dec 2021</p>
+                    <ul class="list-disc pl-5 text-gray-700">
+                        <li>Expertly designed and implemented ETL processes using SQL Server Integration Services (SSIS), enhancing data integration and workflow efficiencies across various systems.</li>
+                        <li>Developed complex T-SQL scripts for data manipulation and querying tasks, significantly improving data retrieval and processing speed.</li>
+                        <li>Utilized SQL Server Reporting Services (SSRS) to create comprehensive and interactive reports, dashboards, and KPIs that facilitated strategic business decision-making.</li>
+                        <li>Orchestrated data transformation and loading solutions with SSIS, ensuring accurate, timely, and efficient data availability for end-user consumption.</li>
+                        <li>Optimized T-SQL queries and SSIS packages for performance, reducing execution times.</li>
+                        <li>Conducted data validation and compliance checks using T-SQL, ensuring integrity and accuracy of data in SSRS reports and ETL processes.</li>
+                        <li>Collaborated with cross-functional teams to translate business requirements into technical specifications, using SSIS and SSRS to deliver tailored data solutions.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Carter Logistics -->
+            <div class="card">
+                <div class="experience-item">
+                    <h3 class="text-xl experience-title">Junior Data Developer/Administrator</h3>
+                    <p class="experience-company">Carter Logistics, Anderson, IN</p>
+                    <p class="text-sm text-gray-500 mb-2">July 2016 – Dec 2018</p>
+                    <ul class="list-disc pl-5 text-gray-700">
+                        <li>Developed and supported databases and T-SQL objects, including complex ETL packages using SSIS.</li>
+                        <li>Administered MS SQL installations, performed upgrades, debugging, monitoring, troubleshooting, and optimized query performance.</li>
+                        <li>Created parameterized queries and generated reports using SSRS for various stakeholders.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section class="mb-8">
+            <h2 class="text-3xl font-semibold section-title">Education</h2>
+            <div class="card">
+                <ul class="list-disc pl-5 text-gray-700">
+                    <li class="mb-2"><strong>Mekelle University</strong>, Bachelor of Science Degree in Engineering, Mekelle, Ethiopia 2014</li>
+                    <li class="mb-2"><strong>Mesa Community College</strong>, Certificate Program in Computer Programming, Mesa, AZ 2016</li>
+                    <li><strong>Eleven Fifty Academy</strong>, Certificate in Software Development, Indianapolis, IN, October 2022</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section>
+            <h2 class="text-3xl font-semibold section-title">Contact Me</h2>
+            <div class="card text-center">
+                <p class="text-lg mb-4">I am available for data engineering services and collaborations. Feel free to reach out!</p>
+                <p class="text-xl font-semibold">Email: <a href="mailto:adanedawitt@gmail.com" class="contact-link">adanedawitt@gmail.com</a></p>
+                <p class="text-xl font-semibold">Phone: 317-902-7364</p>
+                <p class="text-xl font-semibold">LinkedIn: <a href="https://linkedin.com/in/dawit1221/" target="_blank" class="contact-link">linkedin.com/in/dawit1221/</a></p>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer text-center">
+        <div class="container mx-auto px-4">
+            <p>&copy; 2025 Dawit Adane. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const skillTags = document.querySelectorAll('.skill-tag');
+            const skillExplanationArea = document.getElementById('skill-explanation-area');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const clearExplanationBtn = document.getElementById('clear-explanation-btn');
+
+            // IMPORTANT: Replace with the actual URL of your deployed Netlify Function
+            // This function will act as a secure proxy to call the Gemini API, keeping your API key secret.
+            const netlifyFunctionEndpoint = 'YOUR_NETLIFY_FUNCTION_URL_HERE'; 
+
+            // Add event listeners to each skill tag
+            skillTags.forEach(tag => {
+                tag.addEventListener('click', async () => {
+                    const skillName = tag.dataset.skill; // Get the skill name from the data-skill attribute
+                    skillExplanationArea.innerHTML = ''; // Clear any previous explanation
+                    skillExplanationArea.classList.add('hidden'); // Hide the explanation area
+                    clearExplanationBtn.classList.add('hidden'); // Hide the clear button
+                    loadingIndicator.classList.remove('hidden'); // Show loading indicator
+
+                    if (netlifyFunctionEndpoint === 'YOUR_NETLIFY_FUNCTION_URL_HERE') {
+                        skillExplanationArea.innerHTML = `<p class="text-red-500">To enable AI explanations, please deploy a Netlify Function (or similar serverless backend) and update 'netlifyFunctionEndpoint' in this HTML file with its URL.</p>`;
+                        skillExplanationArea.classList.remove('hidden');
+                        clearExplanationBtn.classList.remove('hidden');
+                        loadingIndicator.classList.add('hidden');
+                        return; // Stop execution if endpoint is not set
+                    }
+
+                    try {
+                        // Make the fetch call to the Netlify Function
+                        const response = await fetch(netlifyFunctionEndpoint, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ skill: skillName }) // Send the skill name to the function
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+
+                        const result = await response.json();
+
+                        if (result && result.explanation) {
+                            skillExplanationArea.innerHTML = `<p class="text-gray-800">${result.explanation}</p>`;
+                            skillExplanationArea.classList.remove('hidden'); // Show the explanation area
+                            clearExplanationBtn.classList.remove('hidden'); // Show the clear button
+                        } else {
+                            skillExplanationArea.innerHTML = `<p class="text-red-500">Could not retrieve an explanation for "${skillName}". Please try again.</p>`;
+                            skillExplanationArea.classList.remove('hidden'); // Show the explanation area
+                            clearExplanationBtn.classList.remove('hidden'); // Show the clear button
+                        }
+                    } catch (error) {
+                        console.error('Error calling Netlify Function:', error);
+                        skillExplanationArea.innerHTML = `<p class="text-red-500">Error fetching explanation: ${error.message}. Please check your Netlify Function deployment and network connection.</p>`;
+                        skillExplanationArea.classList.remove('hidden'); // Show the explanation area
+                        clearExplanationBtn.classList.remove('hidden'); // Show the clear button
+                    } finally {
+                        loadingIndicator.classList.add('hidden'); // Hide loading indicator
+                    }
+                });
+            });
+
+            // Add event listener for the clear explanation button
+            clearExplanationBtn.addEventListener('click', () => {
+                skillExplanationArea.innerHTML = '';
+                skillExplanationArea.classList.add('hidden');
+                clearExplanationBtn.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
