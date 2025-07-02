@@ -1,0 +1,43 @@
+# .github/workflows/deploy.yml
+name: Deploy Portfolio Website
+
+on:
+  push:
+    branches:
+      - main # This workflow runs when changes are pushed to the 'main' branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # Run on a Linux virtual machine
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4 # Action to check out your repository code
+
+    - name: Setup Node.js (if you had build steps like npm install/build)
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18' # Specify Node.js version
+
+    # If your project had a build step (e.g., for React, Vue, or if you were injecting env vars)
+    # - name: Install dependencies
+    #   run: npm install
+
+    # - name: Build project (if applicable)
+    #   run: npm run build
+      # During a build step here, you *might* inject environment variables
+      # For example, if you had a placeholder in your JS like process.env.VITE_API_KEY
+      # you would configure your build tool (e.g., Vite, Webpack) to replace it.
+      # However, for sensitive keys like Gemini API keys, this is still not recommended for client-side.
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3 # A popular action for deploying to GitHub Pages
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }} # This is a special token provided by GitHub Actions
+        publish_dir: ./ # The directory containing your static files (e.g., index.html, style.css)
+        # If your website was in a 'dist' or 'build' folder after a build step, you'd use:
+        # publish_dir: ./dist
+      env:
+        # This is how you would pass *your* custom GitHub secrets to a build step if needed.
+        # However, for API keys used in client-side JS, this still exposes them.
+        MY_GEMINI_API_KEY: ${{ secrets.API_KEY }} # Example: Accessing your 'GEMENI' secret
