@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-UA">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dawit Adane - Advanced Data Engineer Portfolio</title>
+    <!-- Tailwind CSS CDN for utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS for the glass effect and overall layout */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Darker gradient background for glass effect */
+            background: linear-gradient(135deg, #3a0670 0%, #154590 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Main container for the portfolio content */
+        .portfolio-container {
+            /* Darker white with less opacity */
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px; /* More rounded corners */
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5); /* Stronger, darker shadow for depth */
+            backdrop-filter: blur(15px); /* Slightly more blur for a deeper glass effect */
+            -webkit-backdrop-filter: blur(15px); /* Safari support */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Lighter border for definition against dark */
+            width: 100%;
+            max-width: 1200px; /* Max width for desktop */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header and Navigation */
+        header {
+            /* Slightly less transparent for header */
+            background: rgba(255, 255, 255, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* Allow navigation items to wrap on smaller screens */
+        }
+
+        nav li {
+            margin: 0 10px; /* Reduced margin for more items */
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            display: block;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            white-space: nowrap; /* Prevent text wrapping in nav links */
+        }
+
+        nav a:hover, nav a.active {
+            /* Darker hover state */
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Content Sections */
+        main {
+            padding: 30px;
+            color: white; /* Keep text white for contrast */
+            flex-grow: 1; /* Allows main content to take available space */
+        }
+
+        section {
+            display: none; /* Hidden by default, shown by JS */
+        }
+
+        section.active {
+            display: block;
+        }
+
+        h1, h2, h3 {
+            color: #b3e0ff; /* Slightly darker blue for headings for better contrast */
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.5); /* Stronger text shadow */
+        }
+
+        /* Specific element styling for glass effect consistency */
+        .glass-card {
+            /* Darker background for cards */
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); /* Darker shadow for cards */
+        }
+
+        .button {
+            /* Darker button background */
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .button:hover {
+            /* Darker button hover state */
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .button.secondary {
+            background: rgba(0, 0, 0, 0.3); /* Darker secondary button */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .button.secondary:hover {
+            background: rgba(0, 0, 0, 0.5); /* Darker secondary button hover */
+        }
+
+        .dashboard-placeholder {
+            border: 2px dashed rgba(255, 255, 255, 0.3); /* Darker dashed border */
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+            background-color: rgba(0, 0, 0, 0.2); /* Darker background for placeholder */
+            color: rgba(255, 255, 255, 0.7); /* Slightly darker text for placeholder */
+            font-style: italic;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .portfolio-container {
+                padding: 10px;
+            }
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav li {
+                margin: 5px 0;
+            }
+            main {
+                padding: 20px;
+            }
+            .button {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-5">
+    <div class="portfolio-container">
+        <header class="p-4">
+            <nav>
+                <ul class="flex justify-center space-x-2 md:space-x-4">
+                    <li><a href="#home" class="nav-link active" data-section="home">Home</a></li>
+                    <li><a href="#portfolio" class="nav-link" data-section="portfolio">Portfolio</a></li>
+                    <li><a href="#services" class="nav-link" data-section="services">Services</a></li>
+                    <li><a href="#contract" class="nav-link" data-section="contract">Contract</a></li>
+                    <li><a href="#mentoring" class="nav-link" data-section="mentoring">Mentoring</a></li>
+                    <li><a href="#ai-demo" class="nav-link" data-section="ai-demo">AI Demo</a></li>
+                    <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="p-8 md:p-12">
+            <!-- Home Section -->
+            <section id="home" class="active">
+                <div class="text-center mb-10">
+                    <h1 class="text-5xl md:text-6xl font-bold mb-4">Dawit Adane</h1>
+                    <h2 class="text-3xl md:text-4xl font-semibold mb-6">Advanced Data Engineer</h2>
+                    <p class="text-lg md:text-xl leading-relaxed max-w-3xl mx-auto mb-8">
+                        With 7+ years of experience, I architect end-to-end data pipelines using Snowflake, Azure, and Microsoft SQL Server. Proficient in T-SQL, dbt Core, Fivetran, and CI/CD with GitHub Actions, I deliver scalable, cloud-native data solutions for real-time analytics. I specialize in automating data workflows and designing dynamic Power BI dashboards to drive data-driven decision-making.
+                    </p>
+                    <div class="space-x-4">
+                        <a href="#portfolio" class="button" data-section="portfolio">View My Portfolio</a>
+                        <a href="#contact" class="button secondary" data-section="contact">Get In Touch</a>
+                    </div>
+                </div>
+
+                <div class="glass-card mb-10 p-6 md:p-8">
+                    <h2 class="text-3xl font-bold mb-6 text-center">Summary</h2>
+                    <p class="text-lg leading-relaxed">
+                        Data Engineer with 7+ years of experience architecting end-to-end data pipelines using Snowflake, Azure, and Microsoft SQL Server. Proficient in T-SQL, dbt Core, Fivetran, and CI/CD with GitHub Actions, I deliver scalable, cloud-native data solutions for real-time analytics. Skilled in automating data workflows and designing dynamic Power BI dashboards, I collaborate with cross-functional teams to drive data-driven decision-making.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass-card p-6 md:p-8">
+                        <h2 class="text-3xl font-bold mb-6 text-center">Technical Skills</h2>
+                        <ul class="list-none p-0 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <li class="bg-white bg-opacity-10 p-4 rounded-lg border border-white border-opacity-20"><strong>Programming:</strong> T-SQL, Python, PowerShell</li>
+                            <li class="bg-white bg-opacity-10 p-4 rounded-lg border border-white border-opacity-20"><strong>Databases:</strong> Microsoft SQL Server, Snowflake, BigQuery, PostgreSQL, MySQL</li>
+                            <li class="bg-white bg-opacity-10 p-4 rounded-lg border border-white border-opacity-20"><strong>Tools/Frameworks:</strong> SSIS, SSRS, Power BI, dbt Core, Fivetran, Azure Data Factory, Azure Synapse, Azure Functions</li>
+                            <li class="bg-white bg-opacity-10 p-4 rounded-lg border border-white border-opacity-20"><strong>DevOps:</strong> Git, Azure DevOps, GitHub Actions, CI/CD pipelines</li>
+                            <li class="bg-white bg-opacity-10 p-4 rounded-lg border border-white border-opacity-20"><strong>Web Technologies:</strong> HTML, CSS, APIs, MVC</li>
+                        </ul>
+                    </div>
+
+                    <div class="glass-card p-6 md:p-8">
+                        <h2 class="text-3xl font-bold mb-6 text-center">Education</h2>
+                        <ul class="list-disc pl-5 space-y-3">
+                            <li><strong>Mekelle University</strong>, Bachelor of Science Degree in Engineering, Mekelle, Ethiopia 2014</li>
+                            <li><strong>Mesa Community College</strong>, Certificate Program in Computer Programming, Mesa, AZ 2016</li>
+                            <li><strong>Eleven Fifty Academy</strong>, Certificate in Software Development, Indianapolis, IN, October 2022</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Portfolio Section -->
+            <section id="portfolio">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-center">My Portfolio</h1>
+                <p class="text-lg md:text-xl leading-relaxed text-center mb-10">
+                    Explore my projects that showcase my expertise in designing, implementing, and optimizing robust data solutions, from ingestion and transformation to visualization and deployment.
+                </p>
+
+                <!-- Project 1: Healthcare -->
+                <div class="glass-card project-detail mb-10 p-6 md:p-8">
+                    <h2 class="text-3xl font-bold mb-4">Project 1: Real-Time Healthcare Analytics Platform (Wex - Health Care)</h2>
+                    <h3 class="text-2xl font-semibold mb-3">Overview:</h3>
+                    <p class="mb-4">This project highlights the development of an end-to-end data pipeline for a healthcare organization, integrating diverse data sources into Snowflake and enabling real-time analytics for critical business operations. My role involved architecting the data flow, optimizing data ingestion, and preparing data for stakeholder consumption.</p>
+                    <h3 class="text-2xl font-semibold mb-3">Key Contributions & Technologies Used:</h3>
+                    <ul class="list-disc pl-5 space-y-2 mb-6">
+                        <li><strong>Data Ingestion & Integration:</strong> Architected end-to-end data pipelines, integrating BigQuery, flat files, and APIs into Snowflake via Azure Storage, processing 1TB+ of daily data with 99.9% uptime. Configured Fivetran syncs to ingest 500GB+ of BigQuery data into Snowflake, reducing latency by 20% for real-time analytics.</li>
+                        <li><strong>Data Transformation & Modeling:</strong> Deployed dbt Core and Snowflake environments (dev, staging, prod), authoring 50+ data models to support analytics for 10+ business units.</li>
+                        <li><strong>Automation & Reliability:</strong> Implemented SFTP and Azure Functions to automate secure data transfers to Azure Storage, improving ingestion reliability by 25%. Built GitHub Actions workflows for CI/CD, automating dbt model deployments and daily Snowflake data refreshes, cutting deployment time by 40%.</li>
+                        <li><strong>Reporting & Visualization:</strong> Collaborated with analytics team to design 10+ dynamic Power BI dashboards, visualizing KPIs for 100+ stakeholders and driving 15% faster decision-making.</li>
+                    </ul>
+                    <h3 class="text-2xl font-semibold mb-3">Dashboard Showcase: Healthcare Operations Dashboard</h3>
+                    <p class="mb-4">This conceptual dashboard visualizes key performance indicators (KPIs) relevant to healthcare operations, demonstrating how raw data is transformed into actionable insights.</p>
+                    <ul class="list-disc pl-5 space-y-2 mb-6">
+                        <li><strong>Patient Admissions & Discharges:</strong> Trends over time, breakdown by department/facility.</li>
+                        <li><strong>Claims Processing Status:</strong> Number of claims processed, average processing time, error rates, and a breakdown by claim type.</li>
+                        <li><strong>Revenue Cycle Management:</strong> Revenue trends, denied claims, outstanding balances.</li>
+                        <li><strong>Operational Efficiency:</strong> Data pipeline uptime, data refresh latency, data volume processed daily.</li>
+                        <li><strong>Data Quality Metrics:</strong> Displaying the success rate of data ingestion and transformation, highlighting any anomalies or data integrity issues detected.</li>
+                    </ul>
+                    <div class="dashboard-placeholder">
+                        <p><em>[Insert Image of Healthcare Operations Power BI Dashboard Here]</em></p>
+                        <p><em>Consider embedding an interactive Power BI dashboard or linking to a public view.</em></p>
+                        <img src="https://placehold.co/600x400/007bff/ffffff?text=Healthcare+Dashboard+Mockup" alt="Healthcare Dashboard Mockup" class="mt-4 rounded-lg shadow-lg">
+                    </div>
+                </div>
+
+                <!-- Project 2: Financial -->
+                <div class="glass-card project-detail mb-10 p-6 md:p-8">
+                    <h2 class="text-3xl font-bold mb-4">Project 2: Enterprise Data Migration & Quality Assurance (NetImpact/ASRC)</h2>
+                    <h3 class="text-2xl font-semibold mb-3">Overview:</h3>
+                    <p class="mb-4">This project focuses on my expertise in migrating, transforming, and ensuring the quality of large-scale datasets using Azure's data platform. It showcases my ability to manage complex data movements and implement robust data quality checks.</p>
+                    <h3 class="text-2xl font-semibold mb-3">Key Contributions & Technologies Used:</h3>
+                    <ul class="list-disc pl-5 space-y-2 mb-6">
+                        <li><strong>Data Movement & Orchestration:</strong> Using Azure Data Factory, created pipeline, built, and managed data, orchestrated large scale data movement with another Azure platform. Using Azure Data Factory, moved, transformed, and controlled Data movements based on success, failure, skipped, or completed conditions. Ingested data between various data stores, data transformation, cleansing, and implementing slowly changing dimensions with Azure Data Factory and Azure Synapse pipelines.</li>
+                        <li><strong>Data Quality & Integrity:</strong> Implemented data quality checks within the ETL/ELT processes, setting up alerts for anomalies in data patterns, and developing tools for ongoing data quality monitoring and validation. Designed database schemas, created, and modified tables and views, and ensuring the integrity of data relationships using primary and foreign keys, constraints, and indexes.</li>
+                        <li><strong>Database Optimization & CI/CD:</strong> Crafting new and optimizing existing data structures within Snowflake. Integrating database development processes with CI/CD pipelines in Azure DevOps, ensuring seamless and automated deployment of database changes across different environments.</li>
+                        <li><strong>Reporting & Visualization:</strong> Using BI tools such as Tableau, PowerBI, or Looker to create dashboards that visualize key performance indicators and metrics and providing training to stakeholders on how to use these dashboards effectively.</li>
+                    </ul>
+                    <h3 class="text-2xl font-semibold mb-3">Dashboard Showcase: Financial Performance & Data Health Dashboard</h3>
+                    <p class="mb-4">This conceptual dashboard would illustrate financial KPIs and the health of the underlying data systems, crucial for a financial context.</p>
+                    <ul class="list-disc pl-5 space-y-2 mb-6">
+                        <li><strong>Financial Performance Overview:</strong> Revenue trends, profit margins, operational costs.</li>
+                        <li><strong>Customer Acquisition & Retention:</strong> New customer growth, churn rates, lifetime value.</li>
+                        <li><strong>Investment Portfolio Performance:</strong> Returns on investment, asset allocation, risk assessment.</li>
+                        <li><strong>Data Pipeline Health:</strong> Success/failure rates of data factory pipelines, data volume processed, number of data quality alerts.</li>
+                        <li><strong>Database Schema Compliance:</strong> Monitoring for deviations from expected schema, data type consistency, and integrity rule adherence.</li>
+                    </ul>
+                    <div class="dashboard-placeholder">
+                        <p><em>[Insert Image of Financial Performance Power BI/Tableau/Looker Dashboard Here]</em></p>
+                        <p><em>Consider embedding an interactive dashboard or linking to a public view.</em></p>
+                        <img src="https://placehold.co/600x400/007bff/ffffff?text=Financial+Dashboard+Mockup" alt="Financial Dashboard Mockup" class="mt-4 rounded-lg shadow-lg">
+                    </div>
+                </div>
+
+                <!-- Project 3: Insurance -->
+                <div class="glass-card project-detail mb-10 p-6 md:p-8">
+                    <h2 class="text-3xl font-bold mb-4">Project 3: Insurance Claims & Reporting Optimization (American Structure)</h2>
+                    <h3 class="text-2xl font-semibold mb-3">Overview:</h3>
+                    <p class="mb-4">This project demonstrates my proficiency in designing and implementing ETL processes, developing complex T-SQL scripts, and creating comprehensive reports using Microsoft SQL Server technologies, specifically in an insurance context.</p>
+                    <h3 class="text-2xl font-semibold mb-3">Key Contributions & Technologies Used:</h3>
+                    <ul class="list-disc pl-5 space-y-2 mb-6">
+                        <li><strong>ETL Design & Implementation:</strong> Expertly designed and implemented ETL processes using SQL Server Integration Services (SSIS), enhancing data integration and workflow efficiencies across various systems. Orchestrated data transformation and loading solutions with SSIS, ensuring accurate, timely, and efficient data availability for end-user consumption.</li>
+                        <li><strong>T-SQL Development & Optimization:</strong> Developed complex T-SQL scripts for data manipulation and querying tasks, significantly improving data retrieval and processing speed. Optimized T-SQL queries and SSIS packages for performance, reducing execution times.</li>
+                        <li><strong>Reporting & Data Validation:</strong> Utilized SQL Server Reporting Services (SSRS) to create comprehensive and interactive reports, dashboards, and KPIs that facilitated strategic business decision-making. Conducted data validation and compliance checks using T-SQL, ensuring integrity and accuracy of data in SSRS reports and ETL processes.</li>
+                        <li><strong>Cross-functional Collaboration:</strong> Collaborated with cross-functional teams to translate business requirements into technical specifications, using SSIS and SSRS to deliver tailored data solutions.</li>
+                    </ul>
+                    <h3 class="text-2xl font-semibold mb-3">Dashboard Showcase: Insurance Claims Analytics Dashboard</h3>
+                    <p class="mb-4">This conceptual dashboard would provide insights into various aspects of insurance claims and policy data, demonstrating the impact of efficient data processing.</p>
+                    <ul class="list-disc pl-5 space-y-2 mb-6">
+                        <li><strong>Claims Status & Trends:</strong> Number of claims filed, approved, denied, and pending; trends over time and by claim type.</li>
+                        <li><strong>Claim Payout Analysis:</strong> Total payout amounts, average payout per claim, breakdown by insurance product.</li>
+                        <li><strong>Policyholder Demographics:</strong> Distribution of policyholders by age, location, and policy type.</li>
+                        <li><strong>Fraud Detection Indicators:</strong> Highlighting unusual claim patterns or potential fraud alerts.</li>
+                        <li><strong>Report Generation Performance:</strong> Displaying the refresh times and success rates of SSRS reports and the underlying ETL processes.</li>
+                    </ul>
+                    <div class="dashboard-placeholder">
+                        <p><em>[Insert Image of Insurance Claims SSRS/Power BI Dashboard Here]</em></p>
+                        <p><em>Consider embedding an interactive dashboard or linking to a public view.</em></p>
+                        <img src="https://placehold.co/600x400/007bff/ffffff?text=Insurance+Dashboard+Mockup" alt="Insurance Dashboard Mockup" class="mt-4 rounded-lg shadow-lg">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Services Section -->
+            <section id="services">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-center">Services Offered</h1>
+                <p class="text-lg md:text-xl leading-relaxed text-center mb-10">
+                    Leveraging my extensive experience, I offer specialized data engineering services to help companies build robust, scalable, and efficient data solutions.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="glass-card p-6 md:p-8">
+                        <h2 class="text-2xl font-bold mb-4">End-to-End Data Pipeline Development</h2>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Design and implement scalable ETL/ELT processes using Azure Data Factory, SSIS, and Fivetran.</li>
+                            <li>Integrate diverse data sources (APIs, flat files, databases) into centralized data warehouses like Snowflake and BigQuery.</li>
+                            <li>Ensure high data quality, reliability, and uptime for critical business operations.</li>
+                        </ul>
+                    </div>
+                    <div class="glass-card p-6 md:p-8">
+                        <h2 class="text-2xl font-bold mb-4">Cloud Data Platform Optimization</h2>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Optimize existing data structures and queries within Snowflake and other cloud databases.</li>
+                            <li>Implement dbt Core for data modeling, transformation, and documentation.</li>
+                            <li>Enhance performance and reduce latency for real-time analytics.</li>
+                        </ul>
+                    </div>
+                    <div class="glass-card p-6 md:p-8">
+                        <h2 class="text-2xl font-bold mb-4">CI/CD & DevOps for Data</h2>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Build and automate CI/CD pipelines using GitHub Actions and Azure DevOps for data solutions.</li>
+                            <li>Streamline deployment processes for database changes and data model updates.</li>
+                            <li>Improve data workflow efficiencies and reduce manual intervention.</li>
+                        </ul>
+                    </div>
+                    <div class="glass-card p-6 md:p-8">
+                        <h2 class="text-2xl font-bold mb-4">Data Visualization & Reporting</h2>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Design and develop dynamic Power BI dashboards and interactive reports (SSRS).</li>
+                            <li>Translate complex data into actionable insights for stakeholders.</li>
+                            <li>Provide training and support for effective utilization of BI tools.</li>
+                        </ul>
+                    </div>
+                    <div class="glass-card p-6 md:p-8">
+                        <h2 class="text-2xl font-bold mb-4">Data Governance & Quality</h2>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Implement data quality checks and validation rules within ETL/ELT processes.</li>
+                            <li>Develop monitoring and alerting systems for data anomalies.</li>
+                            <li>Ensure data integrity, accuracy, and compliance with industry standards.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contract for Companies Section -->
+            <section id="contract">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-center">Contracting for Companies</h1>
+                <p class="text-lg md:text-xl leading-relaxed text-center mb-10">
+                    As an independent data engineering contractor, I offer flexible engagement models to meet your specific project needs and deliver high-impact data solutions.
+                </p>
+
+                <div class="glass-card p-6 md:p-8 mb-8">
+                    <h2 class="text-2xl font-bold mb-4">Engagement Models:</h2>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Project-Based:</strong> Ideal for defined scopes, such as building a new data pipeline, migrating a specific dataset, or developing a set of dashboards.</li>
+                        <li><strong>Hourly Consulting:</strong> For ongoing support, troubleshooting, optimization, or advisory services where the scope may evolve.</li>
+                        <li><strong>Retainer-Based:</strong> For continuous, dedicated support on a longer-term basis, ensuring consistent data engineering expertise.</li>
+                    </ul>
+                </div>
+
+                <div class="glass-card p-6 md:p-8">
+                    <h2 class="text-2xl font-bold mb-4">What I Bring to Your Team:</h2>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Expertise:</strong> 7+ years of hands-on experience across various data platforms and tools.</li>
+                        <li><strong>Efficiency:</strong> Proven ability to deliver high-quality solutions efficiently and on time.</li>
+                        <li><strong>Scalability:</strong> Focus on building robust and scalable architectures that grow with your business.</li>
+                        <li><strong>Collaboration:</strong> Strong communication skills to work effectively with cross-functional teams and stakeholders.</li>
+                        <li><strong>Innovation:</strong> Up-to-date with the latest data engineering trends and technologies to provide cutting-edge solutions.</li>
+                    </ul>
+                    <p class="mt-6 text-center">
+                        <a href="#contact" class="button" data-section="contact">Discuss Your Project Needs</a>
+                    </p>
+                </div>
+            </section>
+
+            <!-- Mentoring & Experience Sharing Section -->
+            <section id="mentoring">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-center">Mentoring & Experience Sharing</h1>
+                <p class="text-lg md:text-xl leading-relaxed text-center mb-10">
+                    I am passionate about fostering growth in the data engineering community. I offer personalized mentoring and knowledge-sharing sessions for aspiring and experienced data professionals.
+                </p>
+
+                <div class="glass-card p-6 md:p-8 mb-8">
+                    <h2 class="text-2xl font-bold mb-4">For Starters:</h2>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Career Guidance:</strong> Navigating the data engineering landscape, identifying key skills, and building a strong foundation.</li>
+                        <li><strong>Technical Fundamentals:</strong> Deep dives into SQL, Python for data, basic ETL concepts, and cloud basics.</li>
+                        <li><strong>Project Walkthroughs:</strong> Guidance on personal projects, resume building, and interview preparation.</li>
+                        <li><strong>Best Practices:</strong> Introduction to industry best practices in data modeling, pipeline design, and data quality.</li>
+                    </ul>
+                </div>
+
+                <div class="glass-card p-6 md:p-8">
+                    <h2 class="text-2xl font-bold mb-4">For Experienced Professionals:</h2>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Advanced Architectures:</strong> Discussing complex data warehousing patterns, real-time data processing, and data lake solutions.</li>
+                        <li><strong>Cloud Specialization:</strong> Deepening expertise in Azure, Snowflake, dbt Core, and CI/CD pipelines.</li>
+                        <li><strong>Performance Tuning:</strong> Strategies for optimizing large-scale data pipelines and queries.</li>
+                        <li><strong>Leadership & Strategy:</strong> Guidance on leading data initiatives, defining data strategy, and cross-functional collaboration.</li>
+                    </ul>
+                    <p class="mt-6 text-center">
+                        <a href="#contact" class="button" data-section="contact">Schedule a Mentoring Session</a>
+                    </p>
+                </div>
+            </section>
+
+            <!-- AI Demo Section -->
+            <section id="ai-demo">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-center">AI Demo: Ask Gemini</h1>
+                <p class="text-lg md:text-xl leading-relaxed text-center mb-10">
+                    Experience the power of generative AI. Ask a question related to data engineering, technology, or anything else, and get a response powered by Google's Gemini model.
+                </p>
+
+                <div class="glass-card p-6 md:p-8 max-w-2xl mx-auto">
+                    <div class="mb-6">
+                        <label for="gemini-prompt" class="block text-lg font-semibold mb-2">Your Question:</label>
+                        <textarea id="gemini-prompt" class="w-full p-3 rounded-lg bg-white bg-opacity-10 border border-white border-opacity-20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300" rows="4" placeholder="e.g., What is dbt Core? How does Snowflake optimize data storage?"></textarea>
+                    </div>
+                    <div class="text-center mb-6">
+                        <button id="generate-response-btn" class="button">Generate Response</button>
+                    </div>
+                    <div id="loading-indicator" class="text-center text-lg text-blue-200 hidden">
+                        Generating response... <span class="animate-pulse">...</span>
+                    </div>
+                    <div id="gemini-response" class="mt-8 p-4 rounded-lg bg-white bg-opacity-10 border border-white border-opacity-20 text-lg leading-relaxed whitespace-pre-wrap">
+                        <!-- Gemini's response will appear here -->
+                        Your AI-generated response will appear here.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-center">Contact Me</h1>
+                <p class="text-lg md:text-xl leading-relaxed text-center mb-10">
+                    I'm always open to new opportunities and collaborations. Feel free to reach out!
+                </p>
+                <div class="glass-card p-6 md:p-8 max-w-md mx-auto text-center">
+                    <ul class="list-none p-0 space-y-4 text-lg">
+                        <li><strong>Email:</strong> <a href="mailto:adanedawitt@gmail.com" class="text-blue-200 hover:underline">adanedawitt@gmail.com</a></li>
+                        <li><strong>Phone:</strong> <a href="tel:+13179027364" class="text-blue-200 hover:underline">317-902-7364</a></li>
+                        <li><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/dawit1221/" target="_blank" class="text-blue-200 hover:underline">linkedin.com/in/dawit1221/</a></li>
+                        <li><strong>Location:</strong> Heath, TX</li>
+                    </ul>
+                    <!-- You might add a simple contact form here if your website builder supports it -->
+                </div>
+            </section>
+        </main>
+
+        <footer class="p-4 text-center text-white text-opacity-80 border-t border-white border-opacity-10">
+            <p>&copy; 2025 Dawit Adane. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+            const generateBtn = document.getElementById('generate-response-btn');
+            const promptInput = document.getElementById('gemini-prompt');
+            const responseDiv = document.getElementById('gemini-response');
+            const loadingIndicator = document.getElementById('loading-indicator');
+
+            // Function to show a specific section and update active link
+            function showSection(sectionId) {
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(sectionId).classList.add('active');
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                });
+                document.querySelector(`.nav-link[data-section="${sectionId}"]`).classList.add('active');
+            }
+
+            // Handle navigation clicks
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionId = this.getAttribute('data-section');
+                    showSection(sectionId);
+                });
+            });
+
+            // Handle internal links from buttons (e.g., "View My Portfolio")
+            document.querySelectorAll('.button[data-section]').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionId = this.getAttribute('data-section');
+                    showSection(sectionId);
+                });
+            });
+
+            // Gemini API Integration
+            generateBtn.addEventListener('click', async () => {
+                const prompt = promptInput.value.trim();
+                if (!prompt) {
+                    responseDiv.textContent = "Please enter a question.";
+                    return;
+                }
+
+                loadingIndicator.classList.remove('hidden');
+                responseDiv.textContent = ""; // Clear previous response
+
+                try {
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    // Use the empty apiKey string; Canvas will provide it at runtime
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        responseDiv.textContent = text;
+                    } else {
+                        responseDiv.textContent = "Error: Could not get a valid response from Gemini. Please try again.";
+                        console.error("Gemini API response structure unexpected:", result);
+                    }
+                } catch (error) {
+                    responseDiv.textContent = `Error: ${error.message}. Please check your network connection or try again later.`;
+                    console.error("Error calling Gemini API:", error);
+                } finally {
+                    loadingIndicator.classList.add('hidden');
+                }
+            });
+
+            // Show the home section by default on load
+            showSection('home');
+        });
+    </script>
+</body>
+</html>
