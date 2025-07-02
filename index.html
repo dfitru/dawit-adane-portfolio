@@ -574,6 +574,144 @@
             // Show the home section by default on load
             showSection('home');
         });
+            // Function to fetch and render a dashboard
+    async function renderDashboard(dashboardType, targetElementId) {
+        const chartDiv = document.getElementById(targetElementId);
+        chartDiv.textContent = "Loading interactive chart..."; // Loading message
+
+        try {
+            const response = await fetch(`http://127.0.0.1:5000/api/${dashboardType}-data`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+
+            // --- Example: Plotly.js for Healthcare Admissions Trend ---
+            if (dashboardType === 'healthcare') {
+                const trace1 = {
+                    x: data.trends.months,
+                    y: data.trends.admissions,
+                    name: 'Admissions',
+                    type: 'bar',
+                    marker: { color: 'rgba(179, 224, 255, 0.7)' }
+                };
+                const trace2 = {
+                    x: data.trends.months,
+                    y: data.trends.discharges,
+                    name: 'Discharges',
+                    type: 'bar',
+                    marker: { color: 'rgba(255, 255, 255, 0.7)' }
+                };
+                const layout = {
+                    title: {
+                        text: data.title + ' - Monthly Admissions & Discharges',
+                        font: { color: 'white' }
+                    },
+                    paper_bgcolor: 'rgba(255, 255, 255, 0.05)', // Glass effect background
+                    plot_bgcolor: 'rgba(255, 255, 255, 0.02)',
+                    xaxis: { tickfont: { color: 'white' }, title: { text: 'Month', font: { color: 'white' } } },
+                    yaxis: { tickfont: { color: 'white' }, title: { text: 'Count', font: { color: 'white' } } },
+                    legend: { font: { color: 'white' } },
+                    margin: { t: 50, b: 50, l: 50, r: 50 }
+                };
+                Plotly.newPlot(chartDiv, [trace1, trace2], layout, {responsive: true});
+
+            } else if (dashboardType === 'financial') {
+                // Example for Financial: Revenue & Expenses Line Chart
+                const trace1 = {
+                    x: data.trends.months,
+                    y: data.trends.revenue,
+                    name: 'Revenue',
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    marker: { color: 'rgba(179, 224, 255, 0.7)' },
+                    line: { width: 3 }
+                };
+                const trace2 = {
+                    x: data.trends.months,
+                    y: data.trends.expenses,
+                    name: 'Expenses',
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    marker: { color: 'rgba(255, 100, 100, 0.7)' },
+                    line: { width: 3 }
+                };
+                const layout = {
+                    title: {
+                        text: data.title + ' - Monthly Revenue & Expenses',
+                        font: { color: 'white' }
+                    },
+                    paper_bgcolor: 'rgba(255, 255, 255, 0.05)',
+                    plot_bgcolor: 'rgba(255, 255, 255, 0.02)',
+                    xaxis: { tickfont: { color: 'white' }, title: { text: 'Month', font: { color: 'white' } } },
+                    yaxis: { tickfont: { color: 'white' }, title: { text: 'Amount', font: { color: 'white' } } },
+                    legend: { font: { color: 'white' } },
+                    margin: { t: 50, b: 50, l: 50, r: 50 }
+                };
+                Plotly.newPlot(chartDiv, [trace1, trace2], layout, {responsive: true});
+
+            } else if (dashboardType === 'insurance') {
+                // Example for Insurance: Claims Status Pie Chart
+                const totalApproved = data.metrics.total_claims_filed_ytd - data.metrics.fraud_alerts_this_period; // Simplified
+                const totalDenied = data.trends.claims_denied.reduce((a, b) => a + b, 0);
+                const totalFiled = data.metrics.total_claims_filed_ytd;
+                const totalPending = totalFiled - (totalApproved + totalDenied);
+
+                const pieData = [{
+                    values: [totalApproved, totalDenied, totalPending],
+                    labels: ['Approved', 'Denied', 'Pending'],
+                    type: 'pie',
+                    marker: {
+                        colors: ['rgba(179, 224, 255, 0.7)', 'rgba(255, 100, 100, 0.7)', 'rgba(255, 255, 150, 0.7)']
+                    },
+                    textinfo: "percent",
+                    hoverinfo: 'label+percent+name'
+                }];
+                const layout = {
+                    title: {
+                        text: data.title + ' - Claims Status Distribution',
+                        font: { color: 'white' }
+                    },
+                    paper_bgcolor: 'rgba(255, 255, 255, 0.05)',
+                    plot_bgcolor: 'rgba(255, 255, 255, 0.02)',
+                    legend: { font: { color: 'white' } },
+                    margin: { t: 50, b: 50, l: 50, r: 50 }
+                };
+                Plotly.newPlot(chartDiv, pieData, layout, {responsive: true});
+            }
+
+        } catch (error) {
+            chartDiv.textContent = `Error loading dashboard: ${error.message}`;
+            console.error("Error fetching dashboard data:", error);
+        }
+    }
+
+    // Call renderDashboard when the portfolio section is activated
+    document.addEventListener('sectionActivated', (event) => {
+        if (event.detail.sectionId === 'portfolio') {
+            // Render each dashboard when the portfolio section becomes active
+            renderDashboard('healthcare', 'healthcare-dashboard-chart');
+            renderDashboard('financial', 'financial-dashboard-chart');
+            renderDashboard('insurance', 'insurance-dashboard-chart');
+        }
+    });
+
+    // Modify showSection to dispatch a custom event
+    function showSection(sectionId) {
+        sections.forEach(section => {
+            section.classList.remove('active');
+        });
+        document.getElementById(sectionId).classList.add('active');
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+        });
+        document.querySelector(`.nav-link[data-section="${sectionId}"]`).classList.add('active');
+
+        // Dispatch a custom event after a section becomes active
+        const event = new CustomEvent('sectionActivated', { detail: { sectionId: sectionId } });
+        document.dispatchEvent(event);
+    }
     </script>
 </body>
 </html>
