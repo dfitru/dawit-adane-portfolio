@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-UA">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dawit Adane - Advanced Data Engineer Portfolio</title>
     <!-- Tailwind CSS CDN for utility classes -->
@@ -183,6 +183,7 @@
                     <li><a href="#services" class="nav-link" data-section="services">Services</a></li>
                     <li><a href="#contract" class="nav-link" data-section="contract">Contract</a></li>
                     <li><a href="#mentoring" class="nav-link" data-section="mentoring">Mentoring</a></li>
+                    <li><a href="#ai-demo" class="nav-link" data-section="ai-demo">AI Demo</a></li>
                     <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
                 </ul>
             </nav>
@@ -438,6 +439,31 @@
                 </div>
             </section>
 
+            <!-- AI Demo Section -->
+            <section id="ai-demo">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-center">AI Demo: Ask Gemini</h1>
+                <p class="text-lg md:text-xl leading-relaxed text-center mb-10">
+                    Experience the power of generative AI. Ask a question related to data engineering, technology, or anything else, and get a response powered by Google's Gemini model.
+                </p>
+
+                <div class="glass-card p-6 md:p-8 max-w-2xl mx-auto">
+                    <div class="mb-6">
+                        <label for="gemini-prompt" class="block text-lg font-semibold mb-2">Your Question:</label>
+                        <textarea id="gemini-prompt" class="w-full p-3 rounded-lg bg-white bg-opacity-10 border border-white border-opacity-20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300" rows="4" placeholder="e.g., What is dbt Core? How does Snowflake optimize data storage?"></textarea>
+                    </div>
+                    <div class="text-center mb-6">
+                        <button id="generate-response-btn" class="button">Generate Response</button>
+                    </div>
+                    <div id="loading-indicator" class="text-center text-lg text-blue-200 hidden">
+                        Generating response... <span class="animate-pulse">...</span>
+                    </div>
+                    <div id="gemini-response" class="mt-8 p-4 rounded-lg bg-white bg-opacity-10 border border-white border-opacity-20 text-lg leading-relaxed whitespace-pre-wrap">
+                        <!-- Gemini's response will appear here -->
+                        Your AI-generated response will appear here.
+                    </div>
+                </div>
+            </section>
+
             <!-- Contact Section -->
             <section id="contact">
                 <h1 class="text-4xl md:text-5xl font-bold mb-6 text-center">Contact Me</h1>
@@ -465,6 +491,10 @@
         document.addEventListener('DOMContentLoaded', function() {
             const navLinks = document.querySelectorAll('.nav-link');
             const sections = document.querySelectorAll('main section');
+            const generateBtn = document.getElementById('generate-response-btn');
+            const promptInput = document.getElementById('gemini-prompt');
+            const responseDiv = document.getElementById('gemini-response');
+            const loadingIndicator = document.getElementById('loading-indicator');
 
             // Function to show a specific section and update active link
             function showSection(sectionId) {
@@ -495,6 +525,50 @@
                     const sectionId = this.getAttribute('data-section');
                     showSection(sectionId);
                 });
+            });
+
+            // Gemini API Integration
+            generateBtn.addEventListener('click', async () => {
+                const prompt = promptInput.value.trim();
+                if (!prompt) {
+                    responseDiv.textContent = "Please enter a question.";
+                    return;
+                }
+
+                loadingIndicator.classList.remove('hidden');
+                responseDiv.textContent = ""; // Clear previous response
+
+                try {
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    // Use the empty apiKey string; Canvas will provide it at runtime
+                    const apiKey = process.env.api_key;
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        responseDiv.textContent = text;
+                    } else {
+                        responseDiv.textContent = "Error: Could not get a valid response from Gemini. Please try again.";
+                        console.error("Gemini API response structure unexpected:", result);
+                    }
+                } catch (error) {
+                    responseDiv.textContent = `Error: ${error.message}. Please check your network connection or try again later.`;
+                    console.error("Error calling Gemini API:", error);
+                } finally {
+                    loadingIndicator.classList.add('hidden');
+                }
             });
 
             // Show the home section by default on load
