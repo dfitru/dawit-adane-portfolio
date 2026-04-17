@@ -739,7 +739,7 @@
             ['healthcare-dashboard-chart', 'healthcare-processing-chart', 'financial-dashboard-chart', 'financial-customers-chart', 'insurance-dashboard-chart', 'insurance-monthly-chart']
                 .forEach((id) => {
                     const element = document.getElementById(id);
-                    if (element && element.offsetParent !== null) {
+                    if (element && element.offsetWidth > 0 && element.offsetHeight > 0) {
                         Plotly.Plots.resize(element);
                     }
                 });
