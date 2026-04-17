@@ -662,7 +662,7 @@
         };
 
         const plotConfig = { responsive: true };
-        // 60ms (~one frame plus layout time) is a small empirically safe delay before Plotly sizing.
+        // 60ms is a small empirically safe delay to let section visibility/layout settle before Plotly sizing.
         const chartRenderDelayMs = 60;
         let dashboardsRendered = false;
 
@@ -754,7 +754,7 @@
 
         function renderPortfolioDashboards() {
             if (typeof Plotly === 'undefined') {
-                console.error('Plotly is not loaded.');
+                console.error('Plotly library failed to load. Please check network connection or CDN availability.');
                 return;
             }
 
