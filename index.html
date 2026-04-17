@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-UA">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio website for Dawit Adane, showcasing data engineering projects, services, mentoring, and AI-powered demos.">
     <title>Dawit Adane - Advanced Data Engineer Portfolio</title>
     <!-- Tailwind CSS CDN for utility classes -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plot.ly/plotly-2.35.0.min.js" charset="utf-8"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         /* Custom CSS for the glass effect and overall layout */
@@ -266,6 +268,7 @@
                         <p><em>[Insert Image of Healthcare Operations Power BI Dashboard Here]</em></p>
                         <p><em>Consider embedding an interactive Power BI dashboard or linking to a public view.</em></p>
                         <img src="https://placehold.co/600x400/007bff/ffffff?text=Healthcare+Dashboard+Mockup" alt="Healthcare Dashboard Mockup" class="mt-4 rounded-lg shadow-lg">
+                        <div id="healthcare-dashboard-chart" class="mt-4"></div>
                     </div>
                 </div>
 
@@ -294,6 +297,7 @@
                         <p><em>[Insert Image of Financial Performance Power BI/Tableau/Looker Dashboard Here]</em></p>
                         <p><em>Consider embedding an interactive dashboard or linking to a public view.</em></p>
                         <img src="https://placehold.co/600x400/007bff/ffffff?text=Financial+Dashboard+Mockup" alt="Financial Dashboard Mockup" class="mt-4 rounded-lg shadow-lg">
+                        <div id="financial-dashboard-chart" class="mt-4"></div>
                     </div>
                 </div>
 
@@ -322,6 +326,7 @@
                         <p><em>[Insert Image of Insurance Claims SSRS/Power BI Dashboard Here]</em></p>
                         <p><em>Consider embedding an interactive dashboard or linking to a public view.</em></p>
                         <img src="https://placehold.co/600x400/007bff/ffffff?text=Insurance+Dashboard+Mockup" alt="Insurance Dashboard Mockup" class="mt-4 rounded-lg shadow-lg">
+                        <div id="insurance-dashboard-chart" class="mt-4"></div>
                     </div>
                 </div>
             </section>
@@ -507,6 +512,10 @@
                     link.classList.remove('active');
                 });
                 document.querySelector(`.nav-link[data-section="${sectionId}"]`).classList.add('active');
+
+                // Dispatch a custom event after a section becomes active
+                const event = new CustomEvent('sectionActivated', { detail: { sectionId: sectionId } });
+                document.dispatchEvent(event);
             }
 
             // Handle navigation clicks
@@ -696,22 +705,6 @@
         }
     });
 
-    // Modify showSection to dispatch a custom event
-    function showSection(sectionId) {
-        sections.forEach(section => {
-            section.classList.remove('active');
-        });
-        document.getElementById(sectionId).classList.add('active');
-
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-        });
-        document.querySelector(`.nav-link[data-section="${sectionId}"]`).classList.add('active');
-
-        // Dispatch a custom event after a section becomes active
-        const event = new CustomEvent('sectionActivated', { detail: { sectionId: sectionId } });
-        document.dispatchEvent(event);
-    }
     </script>
 </body>
 </html>
