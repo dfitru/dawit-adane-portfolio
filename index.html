@@ -8,13 +8,26 @@
     <!-- Tailwind CSS CDN for utility classes -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.plot.ly/plotly-2.35.0.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         /* Custom CSS for the glass effect and overall layout */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             /* Darker gradient background for glass effect */
             background: linear-gradient(135deg, #3a0670 0%, #154590 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 15s ease infinite;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -22,6 +35,18 @@
             align-items: center;
             padding: 20px;
             box-sizing: border-box;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
         }
 
         /* Main container for the portfolio content */
@@ -38,6 +63,8 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            position: relative;
+            z-index: 1;
         }
 
         /* Header and Navigation */
@@ -68,6 +95,25 @@
             transition: all 0.3s ease;
             border-radius: 10px;
             white-space: nowrap; /* Prevent text wrapping in nav links */
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            left: 15px;
+            right: 15px;
+            bottom: 6px;
+            height: 2px;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+            background: rgba(179, 224, 255, 0.9);
+        }
+
+        nav a:hover::after,
+        nav a.active::after {
+            transform: scaleX(1);
         }
 
         nav a:hover, nav a.active {
@@ -82,14 +128,28 @@
             padding: 30px;
             color: white; /* Keep text white for contrast */
             flex-grow: 1; /* Allows main content to take available space */
+            position: relative;
         }
 
         section {
-            display: none; /* Hidden by default, shown by JS */
+            display: block;
+            opacity: 0;
+            transform: translateY(16px);
+            visibility: hidden;
+            pointer-events: none;
+            position: absolute;
+            inset: 0;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            will-change: opacity, transform;
         }
 
         section.active {
-            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+            pointer-events: auto;
+            position: relative;
+            inset: auto;
         }
 
         h1, h2, h3 {
@@ -106,6 +166,14 @@
             margin-bottom: 20px;
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 4px 15px rgba(0,0,0,0.3); /* Darker shadow for cards */
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 40px rgba(179, 224, 255, 0.3), 0 0 20px rgba(179, 224, 255, 0.1);
+            border-color: rgba(179, 224, 255, 0.3);
         }
 
         .button {
@@ -124,7 +192,7 @@
             /* Darker button hover state */
             background: rgba(255, 255, 255, 0.35);
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 18px rgba(179, 224, 255, 0.25);
         }
 
         .button.secondary {
@@ -182,6 +250,19 @@
             min-height: 300px;
         }
 
+        #main-heading {
+            display: inline-block;
+            border-right: 2px solid rgba(179, 224, 255, 0.8);
+            padding-right: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: headingCaret 0.8s step-end infinite;
+        }
+
+        @keyframes headingCaret {
+            50% { border-color: transparent; }
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .portfolio-container {
@@ -206,9 +287,10 @@
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-5">
+    <div id="particles-js"></div>
     <div class="portfolio-container">
         <header class="p-4">
-            <nav>
+            <nav data-aos="fade-down">
                 <ul class="flex justify-center space-x-2 md:space-x-4">
                     <li><a href="#home" class="nav-link active" data-section="home">Home</a></li>
                     <li><a href="#portfolio" class="nav-link" data-section="portfolio">Portfolio</a></li>
@@ -225,7 +307,7 @@
             <!-- Home Section -->
             <section id="home" class="active">
                 <div class="text-center mb-10">
-                    <h1 class="text-5xl md:text-6xl font-bold mb-4">Dawit Adane</h1>
+                    <h1 id="main-heading" class="text-5xl md:text-6xl font-bold mb-4">Dawit Adane</h1>
                     <h2 class="text-3xl md:text-4xl font-semibold mb-6">Advanced Data Engineer</h2>
                     <p class="text-lg md:text-xl leading-relaxed max-w-3xl mx-auto mb-8">
                         With 7+ years of experience, I architect end-to-end data pipelines using Snowflake, Azure, and Microsoft SQL Server. Proficient in T-SQL, dbt Core, Fivetran, and CI/CD with GitHub Actions, I deliver scalable, cloud-native data solutions for real-time analytics. I specialize in automating data workflows and designing dynamic Power BI dashboards to drive data-driven decision-making.
@@ -535,7 +617,209 @@
     </div>
 
     <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script>
+        // Matches the CSS section transition timing for section-switch polish.
+        const sectionTransitionMs = 400;
+        // Counter duration keeps KPI animations smooth but quick.
+        const counterDurationMs = 1200;
+        // Shared stagger settings for AOS delays.
+        const delayStartMs = 100;
+        const delayStepMs = 100;
+        const cardDelayMaxMs = 500;
+        const chartDelayMaxMs = 300;
+        // Typing cadence for the main heading animation.
+        const headingTypingSpeedMs = 80;
+        // WeakSet allows automatic garbage collection if KPI nodes are removed/re-rendered.
+        const animatedKpiElements = new WeakSet();
+        let headingTypingIntervalId = null;
+
+        function parseCounterMetadata(rawValue) {
+            // Supports values like "$4.2M", "1,850", "99.8%", and "3.2 days".
+            const match = String(rawValue).trim().match(/^([^0-9+\-]*)([+\-]?\d[\d,]*(?:\.\d+)?)(.*)$/);
+            if (!match) {
+                return null;
+            }
+            const prefix = match[1];
+            const numberText = match[2];
+            const suffix = match[3];
+            const normalized = numberText.replace(/,/g, '');
+            const target = Number.parseFloat(normalized);
+            if (Number.isNaN(target)) {
+                return null;
+            }
+            const decimalPart = normalized.split('.')[1] || '';
+            return {
+                prefix,
+                suffix,
+                target,
+                decimals: decimalPart.length,
+                useGrouping: numberText.includes(',') || Math.abs(target) >= 1000
+            };
+        }
+
+        function formatCounterValue(value, metadata) {
+            const formatter = new Intl.NumberFormat('en-US', {
+                minimumFractionDigits: metadata.decimals,
+                maximumFractionDigits: metadata.decimals,
+                useGrouping: metadata.useGrouping
+            });
+            return `${metadata.prefix}${formatter.format(value)}${metadata.suffix}`;
+        }
+
+        function animateCounter(element, target, duration, metadata) {
+            const startTime = performance.now();
+            element.textContent = formatCounterValue(0, metadata);
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                // Cubic ease-out for a natural deceleration near the final value.
+                const easedProgress = 1 - Math.pow(1 - progress, 3);
+                const currentValue = target * easedProgress;
+
+                element.textContent = formatCounterValue(currentValue, metadata);
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    element.textContent = formatCounterValue(target, metadata);
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        function animateCountersInSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (!section) {
+                return;
+            }
+
+            section.querySelectorAll('.kpi-value').forEach((element) => {
+                if (animatedKpiElements.has(element)) {
+                    return;
+                }
+
+                const originalValue = element.dataset.originalValue || element.textContent.trim();
+                element.dataset.originalValue = originalValue;
+
+                const metadata = parseCounterMetadata(originalValue);
+                if (!metadata) {
+                    return;
+                }
+
+                animateCounter(element, metadata.target, counterDurationMs, metadata);
+                animatedKpiElements.add(element);
+            });
+        }
+
+        function applyAosAttributes() {
+            const nav = document.querySelector('header nav');
+            if (nav) {
+                nav.setAttribute('data-aos', 'fade-down');
+            }
+
+            document.querySelectorAll('main section > h1').forEach((heading) => {
+                heading.setAttribute('data-aos', 'fade-down');
+            });
+
+            let cardDelay = delayStartMs;
+            document.querySelectorAll('.glass-card').forEach((card) => {
+                if (card.classList.contains('kpi-card')) {
+                    return;
+                }
+                card.setAttribute('data-aos', 'fade-up');
+                card.setAttribute('data-aos-delay', String(cardDelay));
+                cardDelay = cardDelay >= cardDelayMaxMs ? delayStartMs : cardDelay + delayStepMs;
+            });
+
+            document.querySelectorAll('.dashboard-kpis').forEach((kpiGroup) => {
+                let kpiDelay = delayStartMs;
+                kpiGroup.querySelectorAll('.kpi-card').forEach((kpiCard) => {
+                    kpiCard.setAttribute('data-aos', 'zoom-in');
+                    kpiCard.setAttribute('data-aos-delay', String(kpiDelay));
+                    kpiDelay += delayStepMs;
+                });
+            });
+
+            let chartDelay = delayStartMs;
+            document.querySelectorAll('.dashboard-chart').forEach((chart) => {
+                chart.setAttribute('data-aos', 'fade-up');
+                chart.setAttribute('data-aos-delay', String(chartDelay));
+                chartDelay = chartDelay >= chartDelayMaxMs ? delayStartMs : chartDelay + delayStepMs;
+            });
+        }
+
+        function initializeParticles() {
+            if (typeof particlesJS !== 'function') {
+                return;
+            }
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 45, density: { enable: true, value_area: 900 } },
+                    color: { value: '#ffffff' },
+                    shape: { type: 'circle' },
+                    opacity: { value: 0.4, random: true },
+                    size: { value: 2.5, random: true },
+                    line_linked: { enable: true, distance: 160, color: '#ffffff', opacity: 0.1, width: 1 },
+                    move: { enable: true, speed: 1.1, direction: 'none', random: false, straight: false, out_mode: 'out' }
+                },
+                interactivity: {
+                    detect_on: 'canvas',
+                    events: {
+                        onhover: { enable: true, mode: 'repulse' },
+                        onclick: { enable: false },
+                        resize: true
+                    },
+                    modes: { repulse: { distance: 70, duration: 0.4 } }
+                },
+                retina_detect: true
+            });
+        }
+
+        function startHeadingTyping() {
+            const heading = document.getElementById('main-heading');
+            if (!heading) {
+                return;
+            }
+            const fullText = heading.dataset.fullText || heading.textContent.trim();
+            heading.dataset.fullText = fullText;
+            let index = 0;
+            heading.textContent = '';
+            if (headingTypingIntervalId) {
+                clearInterval(headingTypingIntervalId);
+                headingTypingIntervalId = null;
+            }
+
+            headingTypingIntervalId = setInterval(() => {
+                index += 1;
+                heading.textContent = fullText.slice(0, index);
+                if (index >= fullText.length) {
+                    clearInterval(headingTypingIntervalId);
+                    headingTypingIntervalId = null;
+                }
+            }, headingTypingSpeedMs);
+        }
+
+        function stopHeadingTyping(showFullText = false) {
+            if (headingTypingIntervalId) {
+                clearInterval(headingTypingIntervalId);
+                headingTypingIntervalId = null;
+            }
+            if (showFullText) {
+                const heading = document.getElementById('main-heading');
+                if (heading && heading.dataset.fullText) {
+                    heading.textContent = heading.dataset.fullText;
+                }
+            }
+        }
+
+        window.addEventListener('beforeunload', () => {
+            stopHeadingTyping();
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             const navLinks = document.querySelectorAll('.nav-link');
             const sections = document.querySelectorAll('main section');
@@ -544,17 +828,46 @@
             const responseDiv = document.getElementById('gemini-response');
             const loadingIndicator = document.getElementById('loading-indicator');
 
+            applyAosAttributes();
+            initializeParticles();
+            startHeadingTyping();
+            if (typeof AOS !== 'undefined') {
+                AOS.init({
+                    duration: 800,
+                    easing: 'ease-out-cubic',
+                    once: true
+                });
+            }
+
             // Function to show a specific section and update active link
             function showSection(sectionId) {
-                sections.forEach(section => {
+                const targetSection = document.getElementById(sectionId);
+                if (!targetSection) {
+                    return;
+                }
+
+                sections.forEach((section) => {
                     section.classList.remove('active');
                 });
-                document.getElementById(sectionId).classList.add('active');
+                targetSection.classList.add('active');
 
                 navLinks.forEach(link => {
                     link.classList.remove('active');
                 });
-                document.querySelector(`.nav-link[data-section="${sectionId}"]`).classList.add('active');
+                const activeLink = document.querySelector(`.nav-link[data-section="${sectionId}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+
+                if (typeof AOS !== 'undefined' && typeof AOS.refresh === 'function') {
+                    setTimeout(() => AOS.refresh(), sectionTransitionMs);
+                }
+
+                if (!targetSection.querySelector('#main-heading')) {
+                    stopHeadingTyping(true);
+                }
+
+                animateCountersInSection(sectionId);
 
                 const sectionActivatedEvent = new CustomEvent('sectionActivated', { detail: { sectionId } });
                 document.dispatchEvent(sectionActivatedEvent);
