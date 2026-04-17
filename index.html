@@ -150,6 +150,36 @@
             border-radius: 15px;
         }
 
+        .dashboard-kpis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .kpi-card {
+            padding: 12px;
+            margin-bottom: 0;
+        }
+
+        .kpi-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.75);
+            margin-bottom: 4px;
+        }
+
+        .kpi-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #b3e0ff;
+            line-height: 1.2;
+        }
+
+        .dashboard-chart {
+            width: 100%;
+            min-height: 300px;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .portfolio-container {
@@ -262,10 +292,15 @@
                         <li><strong>Operational Efficiency:</strong> Data pipeline uptime, data refresh latency, data volume processed daily.</li>
                         <li><strong>Data Quality Metrics:</strong> Displaying the success rate of data ingestion and transformation, highlighting any anomalies or data integrity issues detected.</li>
                     </ul>
-                    <div class="dashboard-placeholder">
-                        <p><em>[Insert Image of Healthcare Operations Power BI Dashboard Here]</em></p>
-                        <p><em>Consider embedding an interactive Power BI dashboard or linking to a public view.</em></p>
-                        <img src="https://placehold.co/600x400/007bff/ffffff?text=Healthcare+Dashboard+Mockup" alt="Healthcare Dashboard Mockup" class="mt-4 rounded-lg shadow-lg">
+                    <div>
+                        <div class="dashboard-kpis">
+                            <div class="glass-card kpi-card"><p class="kpi-label">Total Admissions</p><p class="kpi-value">12,450</p></div>
+                            <div class="glass-card kpi-card"><p class="kpi-label">Avg Processing Time</p><p class="kpi-value">3.2 days</p></div>
+                            <div class="glass-card kpi-card"><p class="kpi-label">Pipeline Uptime</p><p class="kpi-value">99.7%</p></div>
+                            <div class="glass-card kpi-card"><p class="kpi-label">Data Quality Score</p><p class="kpi-value">98.5%</p></div>
+                        </div>
+                        <div id="healthcare-dashboard-chart" class="dashboard-chart"></div>
+                        <div id="healthcare-processing-chart" class="dashboard-chart mt-4"></div>
                     </div>
                 </div>
 
@@ -290,10 +325,15 @@
                         <li><strong>Data Pipeline Health:</strong> Success/failure rates of data factory pipelines, data volume processed, number of data quality alerts.</li>
                         <li><strong>Database Schema Compliance:</strong> Monitoring for deviations from expected schema, data type consistency, and integrity rule adherence.</li>
                     </ul>
-                    <div class="dashboard-placeholder">
-                        <p><em>[Insert Image of Financial Performance Power BI/Tableau/Looker Dashboard Here]</em></p>
-                        <p><em>Consider embedding an interactive dashboard or linking to a public view.</em></p>
-                        <img src="https://placehold.co/600x400/007bff/ffffff?text=Financial+Dashboard+Mockup" alt="Financial Dashboard Mockup" class="mt-4 rounded-lg shadow-lg">
+                    <div>
+                        <div class="dashboard-kpis">
+                            <div class="glass-card kpi-card"><p class="kpi-label">Total Revenue</p><p class="kpi-value">$4.2M</p></div>
+                            <div class="glass-card kpi-card"><p class="kpi-label">Profit Margin</p><p class="kpi-value">23.5%</p></div>
+                            <div class="glass-card kpi-card"><p class="kpi-label">New Customers</p><p class="kpi-value">1,850</p></div>
+                            <div class="glass-card kpi-card"><p class="kpi-label">Pipeline Success Rate</p><p class="kpi-value">99.2%</p></div>
+                        </div>
+                        <div id="financial-dashboard-chart" class="dashboard-chart"></div>
+                        <div id="financial-customers-chart" class="dashboard-chart mt-4"></div>
                     </div>
                 </div>
 
@@ -318,10 +358,15 @@
                         <li><strong>Fraud Detection Indicators:</strong> Highlighting unusual claim patterns or potential fraud alerts.</li>
                         <li><strong>Report Generation Performance:</strong> Displaying the refresh times and success rates of SSRS reports and the underlying ETL processes.</li>
                     </ul>
-                    <div class="dashboard-placeholder">
-                        <p><em>[Insert Image of Insurance Claims SSRS/Power BI Dashboard Here]</em></p>
-                        <p><em>Consider embedding an interactive dashboard or linking to a public view.</em></p>
-                        <img src="https://placehold.co/600x400/007bff/ffffff?text=Insurance+Dashboard+Mockup" alt="Insurance Dashboard Mockup" class="mt-4 rounded-lg shadow-lg">
+                    <div>
+                        <div class="dashboard-kpis">
+                            <div class="glass-card kpi-card"><p class="kpi-label">Total Claims YTD</p><p class="kpi-value">8,340</p></div>
+                            <div class="glass-card kpi-card"><p class="kpi-label">Avg Payout</p><p class="kpi-value">$12,500</p></div>
+                            <div class="glass-card kpi-card"><p class="kpi-label">Fraud Alerts</p><p class="kpi-value">23</p></div>
+                            <div class="glass-card kpi-card"><p class="kpi-label">Report Success Rate</p><p class="kpi-value">99.8%</p></div>
+                        </div>
+                        <div id="insurance-dashboard-chart" class="dashboard-chart"></div>
+                        <div id="insurance-monthly-chart" class="dashboard-chart mt-4"></div>
                     </div>
                 </div>
             </section>
@@ -487,6 +532,7 @@
         </footer>
     </div>
 
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const navLinks = document.querySelectorAll('.nav-link');
@@ -507,6 +553,9 @@
                     link.classList.remove('active');
                 });
                 document.querySelector(`.nav-link[data-section="${sectionId}"]`).classList.add('active');
+
+                const sectionActivatedEvent = new CustomEvent('sectionActivated', { detail: { sectionId } });
+                document.dispatchEvent(sectionActivatedEvent);
             }
 
             // Handle navigation clicks
@@ -574,144 +623,158 @@
             // Show the home section by default on load
             showSection('home');
         });
-            // Function to fetch and render a dashboard
-    async function renderDashboard(dashboardType, targetElementId) {
-        const chartDiv = document.getElementById(targetElementId);
-        chartDiv.textContent = "Loading interactive chart..."; // Loading message
-
-        try {
-            const response = await fetch(`http://127.0.0.1:5000/api/${dashboardType}-data`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+        const dashboardData = {
+            months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            healthcare: {
+                admissions: [920, 980, 1015, 1050, 1035, 1085, 1100, 1070, 1045, 1065, 1030, 1055],
+                discharges: [890, 950, 995, 1008, 1010, 1042, 1075, 1058, 1022, 1038, 1015, 1025],
+                claimsProcessingDays: [3.8, 3.6, 3.5, 3.4, 3.3, 3.2, 3.1, 3.0, 3.1, 3.0, 2.9, 2.8]
+            },
+            financial: {
+                revenue: [305000, 320000, 335000, 345000, 352000, 360000, 375000, 382000, 395000, 408000, 418000, 430000],
+                expenses: [238000, 242000, 248000, 252000, 257000, 262000, 268000, 272000, 276000, 281000, 285000, 291000],
+                quarters: ['Q1', 'Q2', 'Q3', 'Q4'],
+                acquisition: [420, 510, 470, 550],
+                churn: [85, 92, 88, 95]
+            },
+            insurance: {
+                claimsStatus: [6020, 1240, 1080],
+                monthlyFiled: [610, 645, 670, 700, 725, 740, 760, 735, 710, 695, 680, 670],
+                monthlyProcessed: [590, 620, 650, 680, 710, 720, 740, 720, 700, 680, 660, 650]
             }
-            const data = await response.json();
+        };
 
-            // --- Example: Plotly.js for Healthcare Admissions Trend ---
-            if (dashboardType === 'healthcare') {
-                const trace1 = {
-                    x: data.trends.months,
-                    y: data.trends.admissions,
-                    name: 'Admissions',
-                    type: 'bar',
-                    marker: { color: 'rgba(179, 224, 255, 0.7)' }
-                };
-                const trace2 = {
-                    x: data.trends.months,
-                    y: data.trends.discharges,
-                    name: 'Discharges',
-                    type: 'bar',
-                    marker: { color: 'rgba(255, 255, 255, 0.7)' }
-                };
-                const layout = {
-                    title: {
-                        text: data.title + ' - Monthly Admissions & Discharges',
-                        font: { color: 'white' }
-                    },
-                    paper_bgcolor: 'rgba(255, 255, 255, 0.05)', // Glass effect background
-                    plot_bgcolor: 'rgba(255, 255, 255, 0.02)',
-                    xaxis: { tickfont: { color: 'white' }, title: { text: 'Month', font: { color: 'white' } } },
-                    yaxis: { tickfont: { color: 'white' }, title: { text: 'Count', font: { color: 'white' } } },
-                    legend: { font: { color: 'white' } },
-                    margin: { t: 50, b: 50, l: 50, r: 50 }
-                };
-                Plotly.newPlot(chartDiv, [trace1, trace2], layout, {responsive: true});
+        const chartColors = {
+            blue: 'rgba(179, 224, 255, 0.7)',
+            red: 'rgba(255, 100, 100, 0.7)',
+            yellow: 'rgba(255, 255, 150, 0.7)',
+            green: 'rgba(150, 255, 150, 0.7)'
+        };
 
-            } else if (dashboardType === 'financial') {
-                // Example for Financial: Revenue & Expenses Line Chart
-                const trace1 = {
-                    x: data.trends.months,
-                    y: data.trends.revenue,
-                    name: 'Revenue',
-                    type: 'scatter',
-                    mode: 'lines+markers',
-                    marker: { color: 'rgba(179, 224, 255, 0.7)' },
-                    line: { width: 3 }
-                };
-                const trace2 = {
-                    x: data.trends.months,
-                    y: data.trends.expenses,
-                    name: 'Expenses',
-                    type: 'scatter',
-                    mode: 'lines+markers',
-                    marker: { color: 'rgba(255, 100, 100, 0.7)' },
-                    line: { width: 3 }
-                };
-                const layout = {
-                    title: {
-                        text: data.title + ' - Monthly Revenue & Expenses',
-                        font: { color: 'white' }
-                    },
-                    paper_bgcolor: 'rgba(255, 255, 255, 0.05)',
-                    plot_bgcolor: 'rgba(255, 255, 255, 0.02)',
-                    xaxis: { tickfont: { color: 'white' }, title: { text: 'Month', font: { color: 'white' } } },
-                    yaxis: { tickfont: { color: 'white' }, title: { text: 'Amount', font: { color: 'white' } } },
-                    legend: { font: { color: 'white' } },
-                    margin: { t: 50, b: 50, l: 50, r: 50 }
-                };
-                Plotly.newPlot(chartDiv, [trace1, trace2], layout, {responsive: true});
+        const baseLayout = {
+            paper_bgcolor: 'rgba(255, 255, 255, 0.05)',
+            plot_bgcolor: 'rgba(255, 255, 255, 0.02)',
+            font: { color: 'white' },
+            xaxis: { tickfont: { color: 'white' }, title: { font: { color: 'white' } } },
+            yaxis: { tickfont: { color: 'white' }, title: { font: { color: 'white' } } },
+            legend: { font: { color: 'white' } },
+            margin: { t: 50, b: 50, l: 50, r: 30 }
+        };
 
-            } else if (dashboardType === 'insurance') {
-                // Example for Insurance: Claims Status Pie Chart
-                const totalApproved = data.metrics.total_claims_filed_ytd - data.metrics.fraud_alerts_this_period; // Simplified
-                const totalDenied = data.trends.claims_denied.reduce((a, b) => a + b, 0);
-                const totalFiled = data.metrics.total_claims_filed_ytd;
-                const totalPending = totalFiled - (totalApproved + totalDenied);
+        const plotConfig = { responsive: true };
+        // 60ms is a small empirically safe delay to let section visibility/layout settle before Plotly sizing.
+        const chartRenderDelayMs = 60;
+        let dashboardsRendered = false;
 
-                const pieData = [{
-                    values: [totalApproved, totalDenied, totalPending],
-                    labels: ['Approved', 'Denied', 'Pending'],
-                    type: 'pie',
-                    marker: {
-                        colors: ['rgba(179, 224, 255, 0.7)', 'rgba(255, 100, 100, 0.7)', 'rgba(255, 255, 150, 0.7)']
-                    },
-                    textinfo: "percent",
-                    hoverinfo: 'label+percent+name'
-                }];
-                const layout = {
-                    title: {
-                        text: data.title + ' - Claims Status Distribution',
-                        font: { color: 'white' }
-                    },
-                    paper_bgcolor: 'rgba(255, 255, 255, 0.05)',
-                    plot_bgcolor: 'rgba(255, 255, 255, 0.02)',
-                    legend: { font: { color: 'white' } },
-                    margin: { t: 50, b: 50, l: 50, r: 50 }
-                };
-                Plotly.newPlot(chartDiv, pieData, layout, {responsive: true});
+        function renderHealthcareDashboard() {
+            Plotly.newPlot('healthcare-dashboard-chart', [
+                { x: dashboardData.months, y: dashboardData.healthcare.admissions, name: 'Admissions', type: 'bar', marker: { color: chartColors.blue } },
+                { x: dashboardData.months, y: dashboardData.healthcare.discharges, name: 'Discharges', type: 'bar', marker: { color: chartColors.green } }
+            ], {
+                ...baseLayout,
+                title: { text: 'Monthly Patient Admissions vs Discharges', font: { color: 'white' } },
+                barmode: 'group',
+                yaxis: { ...baseLayout.yaxis, title: { text: 'Patients', font: { color: 'white' } } }
+            }, plotConfig);
+
+            Plotly.newPlot('healthcare-processing-chart', [{
+                x: dashboardData.months,
+                y: dashboardData.healthcare.claimsProcessingDays,
+                name: 'Claims Processing Time',
+                type: 'scatter',
+                mode: 'lines+markers',
+                line: { color: chartColors.yellow, width: 3 },
+                marker: { size: 7, color: chartColors.yellow }
+            }], {
+                ...baseLayout,
+                title: { text: 'Claims Processing Time Trend (Days)', font: { color: 'white' } },
+                yaxis: { ...baseLayout.yaxis, title: { text: 'Days', font: { color: 'white' } } }
+            }, plotConfig);
+        }
+
+        function renderFinancialDashboard() {
+            Plotly.newPlot('financial-dashboard-chart', [
+                { x: dashboardData.months, y: dashboardData.financial.revenue, name: 'Revenue', type: 'scatter', mode: 'lines+markers', line: { width: 3, color: chartColors.blue }, marker: { color: chartColors.blue } },
+                { x: dashboardData.months, y: dashboardData.financial.expenses, name: 'Expenses', type: 'scatter', mode: 'lines+markers', line: { width: 3, color: chartColors.red }, marker: { color: chartColors.red } }
+            ], {
+                ...baseLayout,
+                title: { text: 'Revenue vs Expenses (Monthly)', font: { color: 'white' } },
+                yaxis: { ...baseLayout.yaxis, title: { text: 'USD', font: { color: 'white' } } }
+            }, plotConfig);
+
+            Plotly.newPlot('financial-customers-chart', [
+                { x: dashboardData.financial.quarters, y: dashboardData.financial.acquisition, name: 'Customer Acquisition', type: 'bar', marker: { color: chartColors.green } },
+                { x: dashboardData.financial.quarters, y: dashboardData.financial.churn, name: 'Customer Churn', type: 'bar', marker: { color: chartColors.red } }
+            ], {
+                ...baseLayout,
+                title: { text: 'Customer Acquisition vs Churn (Quarterly)', font: { color: 'white' } },
+                barmode: 'group',
+                yaxis: { ...baseLayout.yaxis, title: { text: 'Customers', font: { color: 'white' } } }
+            }, plotConfig);
+        }
+
+        function renderInsuranceDashboard() {
+            Plotly.newPlot('insurance-dashboard-chart', [{
+                values: dashboardData.insurance.claimsStatus,
+                labels: ['Approved', 'Denied', 'Pending'],
+                type: 'pie',
+                marker: { colors: [chartColors.green, chartColors.red, chartColors.yellow] },
+                textinfo: 'label+percent',
+                hoverinfo: 'label+value+percent'
+            }], {
+                ...baseLayout,
+                title: { text: 'Claims Status Distribution', font: { color: 'white' } }
+            }, plotConfig);
+
+            Plotly.newPlot('insurance-monthly-chart', [
+                { x: dashboardData.months, y: dashboardData.insurance.monthlyFiled, name: 'Claims Filed', type: 'bar', marker: { color: chartColors.blue } },
+                { x: dashboardData.months, y: dashboardData.insurance.monthlyProcessed, name: 'Claims Processed', type: 'bar', marker: { color: chartColors.green } }
+            ], {
+                ...baseLayout,
+                title: { text: 'Monthly Claims Filed vs Processed', font: { color: 'white' } },
+                barmode: 'group',
+                yaxis: { ...baseLayout.yaxis, title: { text: 'Claims', font: { color: 'white' } } }
+            }, plotConfig);
+        }
+
+        function resizeDashboardCharts() {
+            const canResizePlots = Plotly.Plots && typeof Plotly.Plots.resize === 'function';
+            ['healthcare-dashboard-chart', 'healthcare-processing-chart', 'financial-dashboard-chart', 'financial-customers-chart', 'insurance-dashboard-chart', 'insurance-monthly-chart']
+                .forEach((id) => {
+                    const element = document.getElementById(id);
+                    if (element && element.offsetWidth > 0 && element.offsetHeight > 0) {
+                        if (canResizePlots) {
+                            Plotly.Plots.resize(element);
+                        } else {
+                            console.warn('Plotly.Plots.resize is unavailable; skipping resize.');
+                        }
+                    }
+                });
+        }
+
+        function renderPortfolioDashboards() {
+            if (typeof Plotly === 'undefined') {
+                console.error('Plotly library failed to load. Please check network connection or CDN availability.');
+                return;
             }
 
-        } catch (error) {
-            chartDiv.textContent = `Error loading dashboard: ${error.message}`;
-            console.error("Error fetching dashboard data:", error);
+            setTimeout(() => {
+                if (!dashboardsRendered) {
+                    renderHealthcareDashboard();
+                    renderFinancialDashboard();
+                    renderInsuranceDashboard();
+                    dashboardsRendered = true;
+                } else {
+                    resizeDashboardCharts();
+                }
+            }, chartRenderDelayMs);
         }
-    }
 
-    // Call renderDashboard when the portfolio section is activated
-    document.addEventListener('sectionActivated', (event) => {
-        if (event.detail.sectionId === 'portfolio') {
-            // Render each dashboard when the portfolio section becomes active
-            renderDashboard('healthcare', 'healthcare-dashboard-chart');
-            renderDashboard('financial', 'financial-dashboard-chart');
-            renderDashboard('insurance', 'insurance-dashboard-chart');
-        }
-    });
-
-    // Modify showSection to dispatch a custom event
-    function showSection(sectionId) {
-        sections.forEach(section => {
-            section.classList.remove('active');
+        document.addEventListener('sectionActivated', (event) => {
+            if (event.detail.sectionId === 'portfolio') {
+                renderPortfolioDashboards();
+            }
         });
-        document.getElementById(sectionId).classList.add('active');
-
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-        });
-        document.querySelector(`.nav-link[data-section="${sectionId}"]`).classList.add('active');
-
-        // Dispatch a custom event after a section becomes active
-        const event = new CustomEvent('sectionActivated', { detail: { sectionId: sectionId } });
-        document.dispatchEvent(event);
-    }
     </script>
 </body>
 </html>
