@@ -662,6 +662,7 @@
         };
 
         const plotConfig = { responsive: true };
+        // Small delay helps ensure the portfolio section is fully visible before Plotly calculates chart sizes.
         const chartRenderDelayMs = 60;
         let dashboardsRendered = false;
 
@@ -744,7 +745,7 @@
                         if (Plotly.Plots && typeof Plotly.Plots.resize === 'function') {
                             Plotly.Plots.resize(element);
                         } else {
-                            Plotly.relayout(element, {});
+                            console.warn('Plotly.Plots.resize is unavailable; skipping resize.');
                         }
                     }
                 });
