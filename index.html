@@ -662,7 +662,7 @@
         };
 
         const plotConfig = { responsive: true };
-        // Small delay helps ensure the portfolio section is fully visible before Plotly calculates chart sizes.
+        // 60ms (~one frame plus layout time) is a small empirically safe delay before Plotly sizing.
         const chartRenderDelayMs = 60;
         let dashboardsRendered = false;
 
@@ -738,11 +738,12 @@
         }
 
         function resizeDashboardCharts() {
+            const canResizePlots = Plotly.Plots && typeof Plotly.Plots.resize === 'function';
             ['healthcare-dashboard-chart', 'healthcare-processing-chart', 'financial-dashboard-chart', 'financial-customers-chart', 'insurance-dashboard-chart', 'insurance-monthly-chart']
                 .forEach((id) => {
                     const element = document.getElementById(id);
                     if (element && element.offsetWidth > 0 && element.offsetHeight > 0) {
-                        if (Plotly.Plots && typeof Plotly.Plots.resize === 'function') {
+                        if (canResizePlots) {
                             Plotly.Plots.resize(element);
                         } else {
                             console.warn('Plotly.Plots.resize is unavailable; skipping resize.');
