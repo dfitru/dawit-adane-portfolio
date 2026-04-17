@@ -662,6 +662,7 @@
         };
 
         const plotConfig = { responsive: true };
+        const chartRenderDelayMs = 60;
         let dashboardsRendered = false;
 
         function renderHealthcareDashboard() {
@@ -740,7 +741,11 @@
                 .forEach((id) => {
                     const element = document.getElementById(id);
                     if (element && element.offsetWidth > 0 && element.offsetHeight > 0) {
-                        Plotly.Plots.resize(element);
+                        if (Plotly.Plots && typeof Plotly.Plots.resize === 'function') {
+                            Plotly.Plots.resize(element);
+                        } else {
+                            Plotly.relayout(element, {});
+                        }
                     }
                 });
         }
@@ -751,18 +756,16 @@
                 return;
             }
 
-            requestAnimationFrame(() => {
-                setTimeout(() => {
-                    if (!dashboardsRendered) {
-                        renderHealthcareDashboard();
-                        renderFinancialDashboard();
-                        renderInsuranceDashboard();
-                        dashboardsRendered = true;
-                    } else {
-                        resizeDashboardCharts();
-                    }
-                }, 60);
-            });
+            setTimeout(() => {
+                if (!dashboardsRendered) {
+                    renderHealthcareDashboard();
+                    renderFinancialDashboard();
+                    renderInsuranceDashboard();
+                    dashboardsRendered = true;
+                } else {
+                    resizeDashboardCharts();
+                }
+            }, chartRenderDelayMs);
         }
 
         document.addEventListener('sectionActivated', (event) => {
